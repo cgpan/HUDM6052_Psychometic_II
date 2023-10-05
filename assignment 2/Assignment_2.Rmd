@@ -98,10 +98,77 @@ for (j in 1:5) {
 }
 ```  
 To make the layout in a good-looking manner, I loaded the results from above to a table as followed. Please remove the comment mark `#` before `print()` function to see the returned results.  
-![](table_1.png)
+![](table_1.png)  
 
+  
+## Q3-Part a  
+*Find the maximum likelihood estimates of the item parameters under...*   
+  
+**My Solution**  
 
+```{r}
+# load the given values
+## the assumed theta_j
+theta_set <- seq(-3,3,by =0.5)
+## number of correct responses for each theta_j
+r_set <- c(0,0,1,2,3,4,5,6,4,4,4,2,1)
+## number of respondents for each theta_j
+f_set <- c(1,2,4,7,8,9,10,8,6,5,5,2,1)
 
+# get the proportion of correct responses for each theta_j
+p_set <- r_set/f_set
+
+# to count the iteration times
+iter_time <- 0
+deltas <- t(t(c(10,10)))
+zeta <- 0
+lambda <- 1.0
+
+while((abs(deltas[1,1])>0.005) & (abs(deltas[2,1])>0.005)) {
+  # set the initial value
+  iter_time <- iter_time+1
+  # define the 2PL model:
+  # note, both the input and output are vectors rather than scalars
+  P <- 1/(1+exp(-(zeta+lambda*theta_set)))
+  Q <- 1-P
+  
+  # define the weight in case of using normal ogive in the future
+  W <- P*Q
+  
+  # Define the L1, L11, L2, L22, L12
+  # Note, to make computation efficient, I use matrix operation
+  vec_tempt_1 <- (p_set -P)/(P*Q)
+  vec_tempt_2 <- (p_set -P)*theta_set/(P*Q)
+  theta_sq_vec <- theta_set^2
+  L1 <- t(f_set)%*%diag(W)%*%t(t(vec_tempt_1))
+  L2 <- t(f_set)%*%diag(W)%*%t(t(vec_tempt_2))
+  L11 <- -t(f_set)%*%t(t(W))
+  L22 <- -t(f_set)%*%diag(W)%*%t(t(theta_sq_vec))
+  L12 <- -t(f_set)%*%diag(W)%*%t(t(theta_set))
+  
+  # make them into matrix form
+  matrix_L <- matrix(c(L11,L12,L12,L22),2,2)
+  vector_L <- t(t(c(L1, L2)))
+  
+  # get the delta zeta and delta lambda
+  deltas <- -solve(matrix_L)%*%vector_L
+  
+  # update the zeta and lambda
+  # note here is to add the deltas not to minus!!!!
+  updated_parameters <- t(t(c(zeta, lambda))) + deltas
+  zeta <-updated_parameters[1,1]
+  lambda <- updated_parameters[2,1]
+}
+print(deltas[1])
+print(deltas[2])
+print(paste0("The iteration time is: ", iter_time," ."))
+print(paste0("The estimated zeta is: ", round(zeta,4)," ."))
+print(paste0("The estimated lambda is: ", round(lambda,4)," ."))
+```  
+
+The results show that the $\hat{\zeta}=.202$ and $\hat{\lambda}=.824$ after 4 iterations. Convert the value into $\hat{\alpha} = \hat{\lambda}=.824$ and $\hat{\beta} = -\frac{\hat{\zeta}}{\hat{\lambda}}=-0.245$. Therefore, the estimated logistic model is $$P(\theta)=\frac{1}{1+e^{-.824(\theta+.245)}}.$$  
+
+Notes about coding: The way my code to get the `L1`,`L11`, etc., is kinda wordy. R actually provides more efficient way. For example, one can just type `L1 <- sum(f_set*W*vec_tempt_1)` to get the same result. Here, I use the matrix alegra style to refresh my memory about the past math knowledge.
 
 
 

@@ -229,4 +229,93 @@ above to a table as followed. Please remove the comment mark \texttt{\#}
 before \texttt{print()} function to see the returned results.\\
 \includegraphics{table_1.png}
 
+\hypertarget{q3-part-a}{%
+\subsection{Q3-Part a}\label{q3-part-a}}
+
+\emph{Find the maximum likelihood estimates of the item parameters
+under\ldots{}}
+
+\textbf{My Solution}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\SpecialCharTok{\textgreater{}} \CommentTok{\# load the given values}
+\ErrorTok{\textgreater{}} \DocumentationTok{\#\# the assumed theta\_j}
+\ErrorTok{\textgreater{}}\NormalTok{ theta\_set }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{3}\NormalTok{,}\DecValTok{3}\NormalTok{,}\AttributeTok{by =}\FloatTok{0.5}\NormalTok{)}
+\SpecialCharTok{\textgreater{}} \DocumentationTok{\#\# number of correct responses for each theta\_j}
+\ErrorTok{\textgreater{}}\NormalTok{ r\_set }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{)}
+\SpecialCharTok{\textgreater{}} \DocumentationTok{\#\# number of respondents for each theta\_j}
+\ErrorTok{\textgreater{}}\NormalTok{ f\_set }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{9}\NormalTok{,}\DecValTok{10}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{)}
+\SpecialCharTok{\textgreater{}} 
+\ErrorTok{\textgreater{}} \CommentTok{\# get the proportion of correct responses for each theta\_j}
+\ErrorTok{\textgreater{}}\NormalTok{ p\_set }\OtherTok{\textless{}{-}}\NormalTok{ r\_set}\SpecialCharTok{/}\NormalTok{f\_set}
+\SpecialCharTok{\textgreater{}} 
+\ErrorTok{\textgreater{}} \CommentTok{\# to count the iteration times}
+\ErrorTok{\textgreater{}}\NormalTok{ iter\_time }\OtherTok{\textless{}{-}} \DecValTok{0}
+\SpecialCharTok{\textgreater{}}\NormalTok{ deltas }\OtherTok{\textless{}{-}} \FunctionTok{t}\NormalTok{(}\FunctionTok{t}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\DecValTok{10}\NormalTok{,}\DecValTok{10}\NormalTok{)))}
+\SpecialCharTok{\textgreater{}}\NormalTok{ zeta }\OtherTok{\textless{}{-}} \DecValTok{0}
+\SpecialCharTok{\textgreater{}}\NormalTok{ lambda }\OtherTok{\textless{}{-}} \FloatTok{1.0}
+\SpecialCharTok{\textgreater{}} 
+\ErrorTok{\textgreater{}} \ControlFlowTok{while}\NormalTok{((}\FunctionTok{abs}\NormalTok{(deltas[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{])}\SpecialCharTok{\textgreater{}}\FloatTok{0.005}\NormalTok{) }\SpecialCharTok{\&}\NormalTok{ (}\FunctionTok{abs}\NormalTok{(deltas[}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{])}\SpecialCharTok{\textgreater{}}\FloatTok{0.005}\NormalTok{)) \{}
+\SpecialCharTok{+}   \CommentTok{\# set the initial value}
+\SpecialCharTok{+}\NormalTok{   iter\_time }\OtherTok{\textless{}{-}}\NormalTok{ iter\_time}\SpecialCharTok{+}\DecValTok{1}
+\SpecialCharTok{+}   \CommentTok{\# define the 2PL model:}
+\SpecialCharTok{+}   \CommentTok{\# note, both the input and output are vectors rather than scalars}
+\SpecialCharTok{+}\NormalTok{   P }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(zeta}\SpecialCharTok{+}\NormalTok{lambda}\SpecialCharTok{*}\NormalTok{theta\_set)))}
+\SpecialCharTok{+}\NormalTok{   Q }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{{-}}\NormalTok{P}
+\SpecialCharTok{+}   
+\SpecialCharTok{+}   \CommentTok{\# define the weight in case of using normal ogive in the future}
+\SpecialCharTok{+}\NormalTok{   W }\OtherTok{\textless{}{-}}\NormalTok{ P}\SpecialCharTok{*}\NormalTok{Q}
+\SpecialCharTok{+}   
+\SpecialCharTok{+}   \CommentTok{\# Define the L1, L11, L2, L22, L12}
+\SpecialCharTok{+}   \CommentTok{\# Note, to make computation efficient, I use matrix operation}
+\SpecialCharTok{+}\NormalTok{   vec\_tempt\_1 }\OtherTok{\textless{}{-}}\NormalTok{ (p\_set }\SpecialCharTok{{-}}\NormalTok{P)}\SpecialCharTok{/}\NormalTok{(P}\SpecialCharTok{*}\NormalTok{Q)}
+\SpecialCharTok{+}\NormalTok{   vec\_tempt\_2 }\OtherTok{\textless{}{-}}\NormalTok{ (p\_set }\SpecialCharTok{{-}}\NormalTok{P)}\SpecialCharTok{*}\NormalTok{theta\_set}\SpecialCharTok{/}\NormalTok{(P}\SpecialCharTok{*}\NormalTok{Q)}
+\SpecialCharTok{+}\NormalTok{   theta\_sq\_vec }\OtherTok{\textless{}{-}}\NormalTok{ theta\_set}\SpecialCharTok{\^{}}\DecValTok{2}
+\SpecialCharTok{+}\NormalTok{   L1 }\OtherTok{\textless{}{-}} \FunctionTok{t}\NormalTok{(f\_set)}\SpecialCharTok{\%*\%}\FunctionTok{diag}\NormalTok{(W)}\SpecialCharTok{\%*\%}\FunctionTok{t}\NormalTok{(}\FunctionTok{t}\NormalTok{(vec\_tempt\_1))}
+\SpecialCharTok{+}\NormalTok{   L2 }\OtherTok{\textless{}{-}} \FunctionTok{t}\NormalTok{(f\_set)}\SpecialCharTok{\%*\%}\FunctionTok{diag}\NormalTok{(W)}\SpecialCharTok{\%*\%}\FunctionTok{t}\NormalTok{(}\FunctionTok{t}\NormalTok{(vec\_tempt\_2))}
+\SpecialCharTok{+}\NormalTok{   L11 }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FunctionTok{t}\NormalTok{(f\_set)}\SpecialCharTok{\%*\%}\FunctionTok{t}\NormalTok{(}\FunctionTok{t}\NormalTok{(W))}
+\SpecialCharTok{+}\NormalTok{   L22 }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FunctionTok{t}\NormalTok{(f\_set)}\SpecialCharTok{\%*\%}\FunctionTok{diag}\NormalTok{(W)}\SpecialCharTok{\%*\%}\FunctionTok{t}\NormalTok{(}\FunctionTok{t}\NormalTok{(theta\_sq\_vec))}
+\SpecialCharTok{+}\NormalTok{   L12 }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FunctionTok{t}\NormalTok{(f\_set)}\SpecialCharTok{\%*\%}\FunctionTok{diag}\NormalTok{(W)}\SpecialCharTok{\%*\%}\FunctionTok{t}\NormalTok{(}\FunctionTok{t}\NormalTok{(theta\_set))}
+\SpecialCharTok{+}   
+\SpecialCharTok{+}   \CommentTok{\# make them into matrix form}
+\SpecialCharTok{+}\NormalTok{   matrix\_L }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{c}\NormalTok{(L11,L12,L12,L22),}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{)}
+\SpecialCharTok{+}\NormalTok{   vector\_L }\OtherTok{\textless{}{-}} \FunctionTok{t}\NormalTok{(}\FunctionTok{t}\NormalTok{(}\FunctionTok{c}\NormalTok{(L1, L2)))}
+\SpecialCharTok{+}   
+\SpecialCharTok{+}   \CommentTok{\# get the delta zeta and delta lambda}
+\SpecialCharTok{+}\NormalTok{   deltas }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FunctionTok{solve}\NormalTok{(matrix\_L)}\SpecialCharTok{\%*\%}\NormalTok{vector\_L}
+\SpecialCharTok{+}   
+\SpecialCharTok{+}   \CommentTok{\# update the zeta and lambda}
+\SpecialCharTok{+}   \CommentTok{\# note here is to add the deltas not to minus!!!!}
+\SpecialCharTok{+}\NormalTok{   updated\_parameters }\OtherTok{\textless{}{-}} \FunctionTok{t}\NormalTok{(}\FunctionTok{t}\NormalTok{(}\FunctionTok{c}\NormalTok{(zeta, lambda))) }\SpecialCharTok{+}\NormalTok{ deltas}
+\SpecialCharTok{+}\NormalTok{   zeta }\OtherTok{\textless{}{-}}\NormalTok{updated\_parameters[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{]}
+\SpecialCharTok{+}\NormalTok{   lambda }\OtherTok{\textless{}{-}}\NormalTok{ updated\_parameters[}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{]}
+\SpecialCharTok{+}\NormalTok{ \}}
+\SpecialCharTok{\textgreater{}} \FunctionTok{print}\NormalTok{(deltas[}\DecValTok{1}\NormalTok{])}
+\NormalTok{[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{{-}}\FloatTok{0.0001296827}
+\SpecialCharTok{\textgreater{}} \FunctionTok{print}\NormalTok{(deltas[}\DecValTok{2}\NormalTok{])}
+\NormalTok{[}\DecValTok{1}\NormalTok{] }\FloatTok{0.000476612}
+\SpecialCharTok{\textgreater{}} \FunctionTok{print}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{"The iteration time is: "}\NormalTok{, iter\_time,}\StringTok{" ."}\NormalTok{))}
+\NormalTok{[}\DecValTok{1}\NormalTok{] }\StringTok{"The iteration time is: 3 ."}
+\SpecialCharTok{\textgreater{}} \FunctionTok{print}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{"The estimated zeta is: "}\NormalTok{, }\FunctionTok{round}\NormalTok{(zeta,}\DecValTok{4}\NormalTok{),}\StringTok{" ."}\NormalTok{))}
+\NormalTok{[}\DecValTok{1}\NormalTok{] }\StringTok{"The estimated zeta is: 0.2016 ."}
+\SpecialCharTok{\textgreater{}} \FunctionTok{print}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{"The estimated lambda is: "}\NormalTok{, }\FunctionTok{round}\NormalTok{(lambda,}\DecValTok{4}\NormalTok{),}\StringTok{" ."}\NormalTok{))}
+\NormalTok{[}\DecValTok{1}\NormalTok{] }\StringTok{"The estimated lambda is: 0.8236 ."}
+\end{Highlighting}
+\end{Shaded}
+
+The results show that the \(\hat{\zeta}=.202\) and
+\(\hat{\lambda}=.824\) after 4 iterations. Convert the value into
+\(\hat{\alpha} = \hat{\lambda}=.824\) and
+\(\hat{\beta} = -\frac{\hat{\zeta}}{\hat{\lambda}}=-0.245\). Therefore,
+the estimated logistic model is
+\[P(\theta)=\frac{1}{1+e^{-.824(\theta+.245)}}.\]
+
+Notes about coding: The way my code to get the \texttt{L1},\texttt{L11},
+etc., is kinda wordy. R actually provides more efficient way. For
+example, one can just type
+\texttt{L1\ \textless{}-\ sum(f\_set*W*vec\_tempt\_1)} to get the same
+result. Here, I use the matrix alegra style to refresh my memory about
+the past math knowledge.
+
 \end{document}
