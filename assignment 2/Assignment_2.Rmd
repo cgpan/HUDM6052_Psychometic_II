@@ -1,0 +1,107 @@
+---
+title: "HUDM6052 Psychometric II Homework_02"
+author: "Chenguang Pan (cp3280@tc.columbia.edu)"
+date: "2023-09-28"
+output:
+  pdf_document:
+    toc: false
+    toc_depth: 4
+    number_sections: false
+    keep_tex: true
+    highlight: tango
+---
+```{=latex}
+\setcounter{tocdepth}{4}
+\tableofcontents
+```
+```{r setup, include=FALSE}
+## Global options
+knitr::opts_chunk$set(
+  cache = TRUE,
+  prompt = TRUE,
+  comment = '',
+  collapse = TRUE,
+  warning = FALSE,
+  message = FALSE)
+```   
+
+## Q1  
+
+*Find the maximum discrimination for 1PL, 2PL, and 3PL logistic models...*  
+
+**My Solution:**  
+**2PL MODEL**  
+
+I begin with a 2PL model since 1PL is a special case of 2PL.
+
+For the 2PL model, $$P(\theta)=\frac{1}{1+e^{-\alpha(\theta-\beta)}},$$ let $Z = \alpha(\theta-\beta)$. Using the chain rule and take the partial derivative on $\alpha$, one can have $$\frac{\partial P}{\partial \theta}=\frac{\partial P}{\partial Z}\frac{\partial Z}{\partial \theta}. $$ Then, expand the formula above, one can have $$\frac{\partial P}{\partial \alpha}=P(1-P)\alpha.$$ Note, this is the slope function of a 2PL model, one still need to take the first derivative (i.e., the second derivative of the original 2PL model) and let it equal to 0 to get the local minimum or maximum. For simplification, I use $S(\theta)$ to represent the slope function of a 2PL model. Then, $$S(\theta) = \alpha P(1-P).$$ Take the partial derivative of the slope function, one can have $$\frac{\partial S}{\partial\theta} = \frac{\partial S}{\partial P}\frac{\partial P}{\partial\theta} = (\alpha-2\alpha P)[\alpha P(1-P)]=0.$$ Solve the equation above, one can find that the extreme values of slope occurs at $P=0, P=1,  P=\frac{1}{2}$. Rigorously, we still need to take the second partial derivative of this slope function to determine the whether it is the local minimum or maximum. But, from the ICC one can easily find that slope will have maximum at $P=\frac{1}{2}$. I skipped this rigorous math proof here. Finally, solve the equation of $P(\theta)=\frac{1}{2}$, we can have the solution $\theta = \beta$.
+
+Therefore, the maximum value of discrimination of a 2PL model is at the point $\theta =\beta.$  
+
+  **1PL MODEL**  
+  
+As for the 1PL model, plug the $\alpha = 1$ into the partial derivative of slope function $\frac{\partial S}{\partial\theta}$ above. One can easily have same conclusion that the maximum of slope of 1PL model is at the point $\theta = \beta$.  
+
+**3PL MODEL**  
+
+
+## Q2  
+
+*Let the discrimination, difficulty and guessing parameters of five items be...*  
+
+**My Solution:**  
+First, I write a 3PL model function:  
+```{r}
+# items' discrimination
+a_ <- c(0.5,1,1.5,2.5,1)
+# items' difficulty levels
+b_ <- c(-1,-0.5,0,0.5,1)
+# items's guessing parameters
+c_ <- c(0,0.1,0.15,0.05,0.32)
+# trait vector
+theta_ <- c(-2.0, -1.0, 0,1,2)
+# write a 3PL model
+irt_3pl <- function(theta,a,b,c){
+  z <- 1.702*a*(theta - b)
+  output <- c + (1-c)/(1+exp(-z))
+  return(output)
+}
+```  
+Next, for each test-taker (i.e., each trait), get the required values iteratively.  
+```{r}
+# using a for-loop to get the values
+for (j in 1:5) {
+  #print(paste0("-------------For the theta =", theta_[j]," : -------------"))
+  exp_cor <- 0
+  for (i in 1:5) {
+    #print(paste0("-----For the item i=", i," : -----"))
+    P <- irt_3pl(theta= theta_[j], 
+                 a=a_[i], b=b_[i], c=c_[i])
+    Q <- 1-P
+    # get the odds
+    odds <- round(P/Q,3)
+    # get the logit
+    logit <- round(log(odds),3)    
+    # if the odds greater than 1, we can expected this student j may
+    # get this item correctly
+    if(odds >=1){
+      exp_cor <- exp_cor + 1
+    }
+    # print the results for this student
+    #print(paste0("Odds: ", odds," ."))
+    #print(paste0("Logit:", logit," ."))
+  }
+  # get the expected proportion of correct
+  prop <- round(exp_cor/5,3)
+  #print(paste0("Expected Correct #:", exp_cor," ."))
+  #print(paste0("Expected Correct proportion:", prop," ."))
+}
+```  
+To make the layout in a good-looking manner, I loaded the results from above to a table as followed. Please remove the comment mark `#` before `print()` function to see the returned results.  
+![](table_1.png)
+
+
+
+
+
+
