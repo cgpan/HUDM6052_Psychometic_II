@@ -32,18 +32,22 @@ knitr::opts_chunk$set(
 **My Solution:**  
 **2PL MODEL**  
 
-I begin with a 2PL model since 1PL is a special case of 2PL.
+I begin with a 2PL model since 1PL is a special case of 2PL. The ultimate purpose is to get the slope function $S(\theta)$ and take the first derivative of this slope function and let it equal to 0 to get the local maximum. One should notice that the slope function $S(\theta)$ is actually the first derivative of the 2PL function $P(\theta)$. Follow this idea, I derive the conclusion step by step:  
 
-For the 2PL model, $$P(\theta)=\frac{1}{1+e^{-\alpha(\theta-\beta)}},$$ let $Z = \alpha(\theta-\beta)$. Using the chain rule and take the partial derivative on $\alpha$, one can have $$\frac{\partial P}{\partial \theta}=\frac{\partial P}{\partial Z}\frac{\partial Z}{\partial \theta}. $$ Then, expand the formula above, one can have $$\frac{\partial P}{\partial \alpha}=P(1-P)\alpha.$$ Note, this is the slope function of a 2PL model, one still need to take the first derivative (i.e., the second derivative of the original 2PL model) and let it equal to 0 to get the local minimum or maximum. For simplification, I use $S(\theta)$ to represent the slope function of a 2PL model. Then, $$S(\theta) = \alpha P(1-P).$$ Take the partial derivative of the slope function, one can have $$\frac{\partial S}{\partial\theta} = \frac{\partial S}{\partial P}\frac{\partial P}{\partial\theta} = (\alpha-2\alpha P)[\alpha P(1-P)]=0.$$ Solve the equation above, one can find that the extreme values of slope occurs at $P=0, P=1,  P=\frac{1}{2}$. Rigorously, we still need to take the second partial derivative of this slope function to determine the whether it is the local minimum or maximum. But, from the ICC one can easily find that slope will have maximum at $P=\frac{1}{2}$. I skipped this rigorous math proof here. Finally, solve the equation of $P(\theta)=\frac{1}{2}$, we can have the solution $\theta = \beta$.
 
-Therefore, the maximum value of discrimination of a 2PL model is at the point $\theta =\beta.$  
+For the 2PL model, $$P(\theta)=\frac{1}{1+e^{-\alpha(\theta-\beta)}},$$ let $Z = \alpha(\theta-\beta)$, $U = e^{-Z}$, and then $P = \frac{1}{1+U}$. Using the chain rule and take the partial derivative on $\theta$, one can have $$\frac{\partial P}{\partial \theta}=\frac{\partial P}{\partial U}\frac{\partial U}{\partial Z}\frac{\partial Z}{\partial \theta}. $$ Since $$\frac{\partial P}{\partial U}=\frac{-1}{(1+U^2)},$$ $$\frac{\partial U}{\partial Z}=-e^{-Z},$$ and $$\frac{\partial Z}{\partial \theta}= \alpha,$$ plug all three partial derivatives into the overall equation. One can have the slope function $$S(\theta)=\frac{\partial P}{\partial \theta}=\frac{\alpha e^{-z}}{(1 + e^{-z})^2}.$$ Next, continue to take the first derivative of this slope function, one can have $$S'(\theta)=\frac{\partial^2 P}{\partial \theta^2}=\alpha^2[\frac{-2U}{(1+U)^3}+\frac{1}{(1+U)^2}](-U),$$ $$S'(\theta)=\frac{\partial^2 P}{\partial \theta^2}=\alpha^2[\frac{U(1-U)}{(1+U)^3}].$$  
+
+Let it equal to 0, and one can have $$U=e^{-\alpha(\theta-\beta)}=1.$$  It is not difficult to have the final solution $$\theta = \beta.$$ The maximum value of discrimination of a 2PL model is at the point $\theta =\beta$.  
+Therefore, the maximum of the 2PL model's slope is $$\frac{1}{4}\alpha$$.
 
   **1PL MODEL**  
   
-As for the 1PL model, plug the $\alpha = 1$ into the partial derivative of slope function $\frac{\partial S}{\partial\theta}$ above. One can easily have same conclusion that the maximum of slope of 1PL model is at the point $\theta = \beta$.  
+Since the 1PL is a special case of 2PL, plug the $\alpha = 1$ into the partial derivative of slope function $S'(\theta)$ above. One can easily have same conclusion that the maximum of slope of 1PL model is at the point $\theta = \beta$.  
+Therefore, the maximum of the 1PL model's slope is $\frac{1}{4}$.
 
 **3PL MODEL**  
-
+For the 3PL model, follow the idea above. It is not difficult to get the slope function $$S(\theta)=\frac{\alpha (1-c) e^{-z}}{(1 + e^{-z})^2}.$$ Plug the $\theta=\beta$, one can easily have the maximum slope is $$\frac{1}{4}\alpha(1-c)$$.  
+**MATH IS S_XY!**
 
 ## Q2  
 
@@ -97,7 +101,8 @@ for (j in 1:5) {
   #print(paste0("Expected Correct proportion:", prop," ."))
 }
 ```  
-To make the layout in a good-looking manner, I loaded the results from above to a table as followed. Please remove the comment mark `#` before `print()` function to see the returned results.  
+To make the layout good-looking, I loaded the results into a table as followed.  
+
 ![](table_1.png)  
 
   
@@ -226,7 +231,7 @@ Comparing the results from two method,$\zeta$ vs. $\zeta_2$ is $.202$ vs. $.299$
 *For the five items given in the Table...*    
   
 **My Solution: **  
-I use $P_i$ to represent the probability of success for a test-taker on the $item_i$. Since the response vector of this given examinee is $X=[0,0,0,1,1]$, the likelihood function is $$L(x) = (1-P_1)(1-P_2)(1-P_3)P_4P_5$$.  
+I use $P_i$ to represent the probability of success for a test-taker on the $item_i$. Since the response vector of this given examinee is $X=[0,0,0,1,1]$, the likelihood function is $$L(X) = (1-P_1)(1-P_2)(1-P_3)P_4P_5$$.  
 
 Here are some assumptions:  
  - A1: The binary-scored-item parameters are known (already given by the question).  
@@ -240,7 +245,7 @@ Here are some assumptions:
 *Plot the likelihood function at values from...*    
   
 **My Solution: **  
-Expanded the likelihood function $L(x)$ above, one can have the following code in R:  
+Expanded the likelihood function $L(X)$ above, one can have the following code in R:  
 ```{r}
 # write a 3PL model
 L_X <- function(theta){
