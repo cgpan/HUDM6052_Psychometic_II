@@ -109,7 +109,7 @@
 \title{HUDM6052 Psychometric II Homework\_02}
 \author{Chenguang Pan
 (\href{mailto:cp3280@tc.columbia.edu}{\nolinkurl{cp3280@tc.columbia.edu}})}
-\date{2023-09-28}
+\date{2023-10-05}
 
 \begin{document}
 \maketitle
@@ -350,7 +350,48 @@ is 0.239; SE for \(\zeta\) is 0.273; SE for \(\beta\) is 0.339.
 
 \emph{Find the minimum logit\ldots{}}
 
-\textbf{My Solution: }
+\textbf{My Solution: }\\
+Refer to the equation (2.35) and (2.36) from Baker \& Kim(2004), one can
+have
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\SpecialCharTok{\textgreater{}} \CommentTok{\# re{-}define the p\_set and get the log ratios}
+\ErrorTok{\textgreater{}}\NormalTok{ q\_set }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{{-}}\NormalTok{p\_set}
+\SpecialCharTok{\textgreater{}}\NormalTok{ l\_set }\OtherTok{\textless{}{-}} \FunctionTok{log}\NormalTok{(p\_set[}\DecValTok{3}\SpecialCharTok{:}\DecValTok{11}\NormalTok{]}\SpecialCharTok{/}\NormalTok{q\_set[}\DecValTok{3}\SpecialCharTok{:}\DecValTok{11}\NormalTok{])}
+\SpecialCharTok{\textgreater{}} \CommentTok{\# use the revised p to replace the 0 or 1}
+\ErrorTok{\textgreater{}}\NormalTok{ l\_set }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\FloatTok{0.5}\NormalTok{,}\FloatTok{0.25}\NormalTok{),l\_set,}\FunctionTok{c}\NormalTok{(}\FloatTok{0.75}\NormalTok{,}\FloatTok{0.5}\NormalTok{))}
+\SpecialCharTok{\textgreater{}}\NormalTok{ l\_set}
+\NormalTok{ [}\DecValTok{1}\NormalTok{]  }\FloatTok{0.5000000}  \FloatTok{0.2500000} \SpecialCharTok{{-}}\FloatTok{1.0986123} \SpecialCharTok{{-}}\FloatTok{0.9162907} \SpecialCharTok{{-}}\FloatTok{0.5108256} \SpecialCharTok{{-}}\FloatTok{0.2231436}
+\NormalTok{ [}\DecValTok{7}\NormalTok{]  }\FloatTok{0.0000000}  \FloatTok{1.0986123}  \FloatTok{0.6931472}  \FloatTok{1.3862944}  \FloatTok{1.3862944}  \FloatTok{0.7500000}
+\NormalTok{[}\DecValTok{13}\NormalTok{]  }\FloatTok{0.5000000}
+\SpecialCharTok{\textgreater{}} \CommentTok{\# prepare some values}
+\ErrorTok{\textgreater{}}\NormalTok{ l\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(l\_set)}
+\SpecialCharTok{\textgreater{}}\NormalTok{ theta\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(theta\_set)}
+\SpecialCharTok{\textgreater{}} 
+\ErrorTok{\textgreater{}} \CommentTok{\# using the equation (2.35)}
+\ErrorTok{\textgreater{}}\NormalTok{ zeta\_2\_nom }\OtherTok{\textless{}{-}}\NormalTok{ l\_mean}\SpecialCharTok{*}\FunctionTok{sum}\NormalTok{(f\_set}\SpecialCharTok{*}\NormalTok{W}\SpecialCharTok{*}\NormalTok{theta\_sq\_vec)}\SpecialCharTok{{-}}\NormalTok{theta\_mean}\SpecialCharTok{*}\FunctionTok{sum}\NormalTok{(f\_set}\SpecialCharTok{*}\NormalTok{W}\SpecialCharTok{*}\NormalTok{l\_set}\SpecialCharTok{*}\NormalTok{theta\_set)}
+\SpecialCharTok{\textgreater{}}\NormalTok{ zeta\_2\_denom }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(f\_set}\SpecialCharTok{*}\NormalTok{W}\SpecialCharTok{*}\NormalTok{theta\_sq\_vec)}\SpecialCharTok{{-}}\NormalTok{ (}\FunctionTok{sum}\NormalTok{(f\_set}\SpecialCharTok{*}\NormalTok{W}\SpecialCharTok{*}\NormalTok{theta\_set)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(f\_set}\SpecialCharTok{*}\NormalTok{W)}
+\SpecialCharTok{\textgreater{}}\NormalTok{ zeta\_2 }\OtherTok{\textless{}{-}}\NormalTok{ zeta\_2\_nom}\SpecialCharTok{/}\NormalTok{zeta\_2\_denom}
+\SpecialCharTok{\textgreater{}} 
+\ErrorTok{\textgreater{}} \CommentTok{\# using the equation (2.36)}
+\ErrorTok{\textgreater{}}\NormalTok{ lambda\_2\_nom }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(f\_set}\SpecialCharTok{*}\NormalTok{W}\SpecialCharTok{*}\NormalTok{l\_set}\SpecialCharTok{*}\NormalTok{theta\_set)}\SpecialCharTok{{-}}\FunctionTok{sum}\NormalTok{(f\_set}\SpecialCharTok{*}\NormalTok{W}\SpecialCharTok{*}\NormalTok{theta\_set)}\SpecialCharTok{*}\FunctionTok{sum}\NormalTok{(f\_set}\SpecialCharTok{*}\NormalTok{W}\SpecialCharTok{*}\NormalTok{l\_set)}\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(f\_set}\SpecialCharTok{*}\NormalTok{W)}
+\SpecialCharTok{\textgreater{}}\NormalTok{ lambda\_2\_denom }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(f\_set}\SpecialCharTok{*}\NormalTok{W}\SpecialCharTok{*}\NormalTok{theta\_sq\_vec)}\SpecialCharTok{{-}}\FunctionTok{sum}\NormalTok{(f\_set}\SpecialCharTok{*}\NormalTok{W}\SpecialCharTok{*}\NormalTok{theta\_set)}\SpecialCharTok{\^{}}\DecValTok{2}\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(f\_set}\SpecialCharTok{*}\NormalTok{W)}
+\SpecialCharTok{\textgreater{}}\NormalTok{ lambda\_2 }\OtherTok{\textless{}{-}}\NormalTok{ lambda\_2\_nom}\SpecialCharTok{/}\NormalTok{lambda\_2\_denom}
+\SpecialCharTok{\textgreater{}} \FunctionTok{print}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{"The estimated zeta is "}\NormalTok{, }\FunctionTok{round}\NormalTok{(zeta\_2,}\DecValTok{3}\NormalTok{)))}
+\NormalTok{[}\DecValTok{1}\NormalTok{] }\StringTok{"The estimated zeta is 0.299"}
+\SpecialCharTok{\textgreater{}} \FunctionTok{print}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{"The estimated lambda is "}\NormalTok{, }\FunctionTok{round}\NormalTok{(lambda\_2,}\DecValTok{3}\NormalTok{)))}
+\NormalTok{[}\DecValTok{1}\NormalTok{] }\StringTok{"The estimated lambda is 0.573"}
+\end{Highlighting}
+\end{Shaded}
+
+Comparing the results from two method,\(\zeta\) vs.~\(\zeta_2\) is
+\(.202\) vs.~\(.299\); and the \(\lambda\) vs.~\(\lambda_2\) is \(.824\)
+vs.~\(.573\). The two results are not very close. The posssible reason
+is due to the sample size will given relatively large estimation error.
+Especially, at two extreme ends, very few responses make our estimation
+unstable. Comparing them by using the 95\% CI of each statistic may be a
+good choice.
 
 \hypertarget{q4-part-a}{%
 \subsection{Q4-Part a}\label{q4-part-a}}
@@ -370,8 +411,8 @@ question).\\
 examinee is given).\\
 - A3: All items in this test are modeled by the same IRT model (here,
 3PL).\\
-- A4: All items are independent on a given trait (Local Independent). -
-A5: All items measure one type of trait (Unidimensionality).
+- A4: All items are independent on a given trait (Local Independent).\\
+- A5: All items measure one type of trait (Unidimensionality).
 
 \hypertarget{q4-part-b}{%
 \subsection{Q4-Part b}\label{q4-part-b}}
@@ -419,7 +460,7 @@ the results:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Assignment_2_files/figure-latex/unnamed-chunk-6-1.pdf}
+\includegraphics{Assignment_2_files/figure-latex/unnamed-chunk-7-1.pdf}
 The plot shows that the maximum likelihood occurs at around
 \(trait=-0.5\). The maximum likelihood is 0.26.
 

@@ -1,7 +1,7 @@
 ---
 title: "HUDM6052 Psychometric II Homework_02"
 author: "Chenguang Pan (cp3280@tc.columbia.edu)"
-date: "2023-09-28"
+date: "2023-10-05"
 output:
   pdf_document:
     toc: false
@@ -193,6 +193,33 @@ The results show that standard error (SE) for $\alpha$ or $\lambda$ is `r round(
 *Find the minimum logit...*    
   
 **My Solution: **  
+Refer to the equation (2.35) and (2.36) from Baker & Kim(2004), one can have  
+```{r}
+# re-define the p_set and get the log ratios
+q_set <- 1-p_set
+l_set <- log(p_set[3:11]/q_set[3:11])
+# use the revised p to replace the 0 or 1
+l_set <- c(c(0.5,0.25),l_set,c(0.75,0.5))
+l_set
+# prepare some values
+l_mean <- mean(l_set)
+theta_mean <- mean(theta_set)
+
+# using the equation (2.35)
+zeta_2_nom <- l_mean*sum(f_set*W*theta_sq_vec)-theta_mean*sum(f_set*W*l_set*theta_set)
+zeta_2_denom <- sum(f_set*W*theta_sq_vec)- (sum(f_set*W*theta_set)^2)/sum(f_set*W)
+zeta_2 <- zeta_2_nom/zeta_2_denom
+
+# using the equation (2.36)
+lambda_2_nom <- sum(f_set*W*l_set*theta_set)-sum(f_set*W*theta_set)*sum(f_set*W*l_set)/sum(f_set*W)
+lambda_2_denom <- sum(f_set*W*theta_sq_vec)-sum(f_set*W*theta_set)^2/sum(f_set*W)
+lambda_2 <- lambda_2_nom/lambda_2_denom
+print(paste0("The estimated zeta is ", round(zeta_2,3)))
+print(paste0("The estimated lambda is ", round(lambda_2,3)))
+```  
+Comparing the results from two method,$\zeta$ vs. $\zeta_2$ is $.202$ vs. $.299$; and the $\lambda$ vs. $\lambda_2$ is $.824$ vs. $.573$. The two results are not very close. The posssible reason is due to the sample size will given relatively large estimation error. Especially, at two extreme ends, very few responses make our estimation unstable. Comparing them by using the 95% CI of each statistic may be a good choice.  
+
+
   
 ## Q4-Part a  
 
@@ -205,7 +232,7 @@ Here are some assumptions:
  - A1: The binary-scored-item parameters are known (already given by the question).  
  - A2: The examinee are independent (it is satisfied since only one examinee is given).  
  - A3: All items in this test are modeled by the same IRT model (here, 3PL).  
- - A4: All items are independent on a given trait (Local Independent).
+ - A4: All items are independent on a given trait (Local Independent).  
  - A5: All items measure one type of trait (Unidimensionality).  
 
 ## Q4-Part b  
