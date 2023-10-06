@@ -318,4 +318,109 @@ example, one can just type
 result. Here, I use the matrix alegra style to refresh my memory about
 the past math knowledge.
 
+\hypertarget{q3-part-b}{%
+\subsection{Q3-Part b}\label{q3-part-b}}
+
+\emph{Calculate the standard errors of the estimates}
+
+\textbf{My Solution}\\
+From the equations in our lecture notes, one can have the following code
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\SpecialCharTok{\textgreater{}}\NormalTok{ alpha }\OtherTok{\textless{}{-}} \FloatTok{0.824}
+\SpecialCharTok{\textgreater{}}\NormalTok{ beta }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FloatTok{0.245}
+\SpecialCharTok{\textgreater{}}\NormalTok{ var\_alpha }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(f\_set}\SpecialCharTok{*}\NormalTok{W}\SpecialCharTok{*}\NormalTok{(theta\_set}\SpecialCharTok{{-}}\FunctionTok{mean}\NormalTok{(theta\_set))}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\SpecialCharTok{\textgreater{}}\NormalTok{ var\_zeta }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(f\_set}\SpecialCharTok{*}\NormalTok{W) }\SpecialCharTok{+}\NormalTok{ var\_alpha}\SpecialCharTok{*}\FunctionTok{mean}\NormalTok{(theta\_set)}\SpecialCharTok{\^{}}\DecValTok{2}
+\SpecialCharTok{\textgreater{}}\NormalTok{ var\_beta }\OtherTok{\textless{}{-}}\NormalTok{ (}\FunctionTok{sum}\NormalTok{(f\_set}\SpecialCharTok{*}\NormalTok{W)}\SpecialCharTok{\^{}}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}\SpecialCharTok{+}\NormalTok{var\_alpha}\SpecialCharTok{*}\NormalTok{(beta}\SpecialCharTok{{-}}\FunctionTok{mean}\NormalTok{(theta\_set))}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}\SpecialCharTok{*}\NormalTok{alpha}\SpecialCharTok{\^{}}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{)}
+\SpecialCharTok{\textgreater{}}\NormalTok{ (se\_alpha }\OtherTok{\textless{}{-}}\FunctionTok{sqrt}\NormalTok{(var\_alpha))}
+\NormalTok{[}\DecValTok{1}\NormalTok{] }\FloatTok{0.2393551}
+\SpecialCharTok{\textgreater{}}\NormalTok{ (se\_zeta }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(var\_zeta))}
+\NormalTok{[}\DecValTok{1}\NormalTok{] }\FloatTok{0.2732285}
+\SpecialCharTok{\textgreater{}}\NormalTok{ (se\_beta }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(var\_beta))}
+\NormalTok{[}\DecValTok{1}\NormalTok{] }\FloatTok{0.3391392}
+\end{Highlighting}
+\end{Shaded}
+
+The results show that standard error (SE) for \(\alpha\) or \(\lambda\)
+is 0.239; SE for \(\zeta\) is 0.273; SE for \(\beta\) is 0.339.
+
+\hypertarget{q3-part-c}{%
+\subsection{Q3-Part c}\label{q3-part-c}}
+
+\emph{Find the minimum logit\ldots{}}
+
+\textbf{My Solution: }
+
+\hypertarget{q4-part-a}{%
+\subsection{Q4-Part a}\label{q4-part-a}}
+
+\emph{For the five items given in the Table\ldots{}}
+
+\textbf{My Solution: }\\
+I use \(P_i\) to represent the probability of success for a test-taker
+on the \(item_i\). Since the response vector of this given examinee is
+\(X=[0,0,0,1,1]\), the likelihood function is
+\[L(x) = (1-P_1)(1-P_2)(1-P_3)P_4P_5\].
+
+Here are some assumptions:\\
+- A1: The binary-scored-item parameters are known (already given by the
+question).\\
+- A2: The examinee are independent (it is satisfied since only one
+examinee is given).\\
+- A3: All items in this test are modeled by the same IRT model (here,
+3PL).\\
+- A4: All items are independent on a given trait (Local Independent). -
+A5: All items measure one type of trait (Unidimensionality).
+
+\hypertarget{q4-part-b}{%
+\subsection{Q4-Part b}\label{q4-part-b}}
+
+\emph{Plot the likelihood function at values from\ldots{}}
+
+\textbf{My Solution: }\\
+Expanded the likelihood function \(L(x)\) above, one can have the
+following code in R:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\SpecialCharTok{\textgreater{}} \CommentTok{\# write a 3PL model}
+\ErrorTok{\textgreater{}}\NormalTok{ L\_X }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(theta)\{}
+\SpecialCharTok{+}\NormalTok{   a\_set }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{1.25}\NormalTok{,}\FloatTok{1.35}\NormalTok{,}\FloatTok{1.15}\NormalTok{,}\DecValTok{1}\NormalTok{,}\FloatTok{0.75}\NormalTok{)}
+\SpecialCharTok{+}\NormalTok{   b\_set }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{1.20}\NormalTok{,}\FloatTok{0.60}\NormalTok{,}\FloatTok{0.15}\NormalTok{,}\SpecialCharTok{{-}}\FloatTok{0.6}\NormalTok{,}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{)}
+\SpecialCharTok{+}\NormalTok{   c\_set }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.1}\NormalTok{,}\FloatTok{0.15}\NormalTok{,}\FloatTok{0.15}\NormalTok{,}\FloatTok{0.20}\NormalTok{,}\FloatTok{0.10}\NormalTok{)}
+\SpecialCharTok{+}\NormalTok{   P1 }\OtherTok{\textless{}{-}}\NormalTok{ c\_set[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{c\_set[}\DecValTok{1}\NormalTok{])}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(}\FloatTok{1.702}\SpecialCharTok{*}\NormalTok{a\_set[}\DecValTok{1}\NormalTok{]}\SpecialCharTok{*}\NormalTok{(theta }\SpecialCharTok{{-}}\NormalTok{ b\_set[}\DecValTok{1}\NormalTok{]))))}
+\SpecialCharTok{+}\NormalTok{   Q1 }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{{-}}\NormalTok{P1}
+\SpecialCharTok{+}\NormalTok{   P2 }\OtherTok{\textless{}{-}}\NormalTok{ c\_set[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{c\_set[}\DecValTok{2}\NormalTok{])}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(}\FloatTok{1.702}\SpecialCharTok{*}\NormalTok{a\_set[}\DecValTok{2}\NormalTok{]}\SpecialCharTok{*}\NormalTok{(theta }\SpecialCharTok{{-}}\NormalTok{ b\_set[}\DecValTok{2}\NormalTok{]))))}
+\SpecialCharTok{+}\NormalTok{   Q2 }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{{-}}\NormalTok{P2}
+\SpecialCharTok{+}\NormalTok{   P3 }\OtherTok{\textless{}{-}}\NormalTok{ c\_set[}\DecValTok{3}\NormalTok{] }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{c\_set[}\DecValTok{3}\NormalTok{])}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(}\FloatTok{1.702}\SpecialCharTok{*}\NormalTok{a\_set[}\DecValTok{3}\NormalTok{]}\SpecialCharTok{*}\NormalTok{(theta }\SpecialCharTok{{-}}\NormalTok{ b\_set[}\DecValTok{3}\NormalTok{]))))}
+\SpecialCharTok{+}\NormalTok{   Q3 }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{{-}}\NormalTok{P3}
+\SpecialCharTok{+}\NormalTok{   P4 }\OtherTok{\textless{}{-}}\NormalTok{ c\_set[}\DecValTok{4}\NormalTok{] }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{c\_set[}\DecValTok{4}\NormalTok{])}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(}\FloatTok{1.702}\SpecialCharTok{*}\NormalTok{a\_set[}\DecValTok{4}\NormalTok{]}\SpecialCharTok{*}\NormalTok{(theta }\SpecialCharTok{{-}}\NormalTok{ b\_set[}\DecValTok{4}\NormalTok{]))))}
+\SpecialCharTok{+}\NormalTok{   P5 }\OtherTok{\textless{}{-}}\NormalTok{ c\_set[}\DecValTok{5}\NormalTok{] }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{c\_set[}\DecValTok{5}\NormalTok{])}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(}\FloatTok{1.702}\SpecialCharTok{*}\NormalTok{a\_set[}\DecValTok{5}\NormalTok{]}\SpecialCharTok{*}\NormalTok{(theta }\SpecialCharTok{{-}}\NormalTok{ b\_set[}\DecValTok{5}\NormalTok{]))))}
+\SpecialCharTok{+}   \CommentTok{\# write the likelihood function}
+\SpecialCharTok{+}\NormalTok{   L\_x }\OtherTok{\textless{}{-}}\NormalTok{ Q1}\SpecialCharTok{*}\NormalTok{Q2}\SpecialCharTok{*}\NormalTok{Q3}\SpecialCharTok{*}\NormalTok{P4}\SpecialCharTok{*}\NormalTok{P5}
+\SpecialCharTok{+}   \FunctionTok{return}\NormalTok{(L\_x)}
+\SpecialCharTok{+}\NormalTok{ \}}
+\end{Highlighting}
+\end{Shaded}
+
+Based on the likelihood function above, plug the trait vector and plot
+the results:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\SpecialCharTok{\textgreater{}}\NormalTok{ theta\_set }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\AttributeTok{by=}\FloatTok{0.1}\NormalTok{)}
+\SpecialCharTok{\textgreater{}}\NormalTok{ L\_set }\OtherTok{\textless{}{-}} \FunctionTok{L\_X}\NormalTok{(theta\_set)}
+\SpecialCharTok{\textgreater{}} \FunctionTok{plot}\NormalTok{(theta\_set,L\_set,}\AttributeTok{type=}\StringTok{\textquotesingle{}o\textquotesingle{}}\NormalTok{,}
+\SpecialCharTok{+}      \AttributeTok{xlab=}\StringTok{"Traits"}\NormalTok{,}\AttributeTok{ylab=}\StringTok{"Likelihood"}\NormalTok{,}
+\SpecialCharTok{+}      \AttributeTok{main=}\StringTok{"Likelihood Function"}\NormalTok{)}
+\SpecialCharTok{\textgreater{}} \FunctionTok{abline}\NormalTok{(}\AttributeTok{v=}\SpecialCharTok{{-}}\FloatTok{0.5}\NormalTok{, }\AttributeTok{col=}\StringTok{"darkgreen"}\NormalTok{,}\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
+\SpecialCharTok{\textgreater{}} \FunctionTok{grid}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Assignment_2_files/figure-latex/unnamed-chunk-6-1.pdf}
+The plot shows that the maximum likelihood occurs at around
+\(trait=-0.5\). The maximum likelihood is 0.26.
+
 \end{document}

@@ -168,7 +168,81 @@ print(paste0("The estimated lambda is: ", round(lambda,4)," ."))
 
 The results show that the $\hat{\zeta}=.202$ and $\hat{\lambda}=.824$ after 4 iterations. Convert the value into $\hat{\alpha} = \hat{\lambda}=.824$ and $\hat{\beta} = -\frac{\hat{\zeta}}{\hat{\lambda}}=-0.245$. Therefore, the estimated logistic model is $$P(\theta)=\frac{1}{1+e^{-.824(\theta+.245)}}.$$  
 
-Notes about coding: The way my code to get the `L1`,`L11`, etc., is kinda wordy. R actually provides more efficient way. For example, one can just type `L1 <- sum(f_set*W*vec_tempt_1)` to get the same result. Here, I use the matrix alegra style to refresh my memory about the past math knowledge.
+Notes about coding: The way my code to get the `L1`,`L11`, etc., is kinda wordy. R actually provides more efficient way. For example, one can just type `L1 <- sum(f_set*W*vec_tempt_1)` to get the same result. Here, I use the matrix alegra style to refresh my memory about the past math knowledge.  
 
+## Q3-Part b  
+
+*Calculate the standard errors of the estimates*  
+
+**My Solution**  
+From the equations in our lecture notes, one can have the following code
+```{r}
+alpha <- 0.824
+beta <- -0.245
+var_alpha <- 1/sum(f_set*W*(theta_set-mean(theta_set))^2)
+var_zeta <- 1/sum(f_set*W) + var_alpha*mean(theta_set)^2
+var_beta <- (sum(f_set*W)^(-1)+var_alpha*(beta-mean(theta_set))^2)*alpha^(-2)
+(se_alpha <-sqrt(var_alpha))
+(se_zeta <- sqrt(var_zeta))
+(se_beta <- sqrt(var_beta))
+```  
+The results show that standard error (SE) for $\alpha$ or $\lambda$ is `r round(se_alpha,3)`; SE for $\zeta$ is `r round(se_zeta,3)`; SE for $\beta$ is `r round(se_beta,3)`.  
+
+## Q3-Part c  
+
+*Find the minimum logit...*    
+  
+**My Solution: **  
+  
+## Q4-Part a  
+
+*For the five items given in the Table...*    
+  
+**My Solution: **  
+I use $P_i$ to represent the probability of success for a test-taker on the $item_i$. Since the response vector of this given examinee is $X=[0,0,0,1,1]$, the likelihood function is $$L(x) = (1-P_1)(1-P_2)(1-P_3)P_4P_5$$.  
+
+Here are some assumptions:  
+ - A1: The binary-scored-item parameters are known (already given by the question).  
+ - A2: The examinee are independent (it is satisfied since only one examinee is given).  
+ - A3: All items in this test are modeled by the same IRT model (here, 3PL).  
+ - A4: All items are independent on a given trait (Local Independent).
+ - A5: All items measure one type of trait (Unidimensionality).  
+
+## Q4-Part b  
+
+*Plot the likelihood function at values from...*    
+  
+**My Solution: **  
+Expanded the likelihood function $L(x)$ above, one can have the following code in R:  
+```{r}
+# write a 3PL model
+L_X <- function(theta){
+  a_set <- c(1.25,1.35,1.15,1,0.75)
+  b_set <- c(1.20,0.60,0.15,-0.6,-2)
+  c_set <- c(0.1,0.15,0.15,0.20,0.10)
+  P1 <- c_set[1] + (1-c_set[1])/(1+exp(-(1.702*a_set[1]*(theta - b_set[1]))))
+  Q1 <- 1-P1
+  P2 <- c_set[2] + (1-c_set[2])/(1+exp(-(1.702*a_set[2]*(theta - b_set[2]))))
+  Q2 <- 1-P2
+  P3 <- c_set[3] + (1-c_set[3])/(1+exp(-(1.702*a_set[3]*(theta - b_set[3]))))
+  Q3 <- 1-P3
+  P4 <- c_set[4] + (1-c_set[4])/(1+exp(-(1.702*a_set[4]*(theta - b_set[4]))))
+  P5 <- c_set[5] + (1-c_set[5])/(1+exp(-(1.702*a_set[5]*(theta - b_set[5]))))
+  # write the likelihood function
+  L_x <- Q1*Q2*Q3*P4*P5
+  return(L_x)
+}
+```  
+Based on the likelihood function above, plug the trait vector and plot the results:  
+```{r}
+theta_set <- seq(-1,1,by=0.1)
+L_set <- L_X(theta_set)
+plot(theta_set,L_set,type='o',
+     xlab="Traits",ylab="Likelihood",
+     main="Likelihood Function")
+abline(v=-0.5, col="darkgreen",lty=2)
+grid()
+```  
+The plot shows that the maximum likelihood occurs at around $trait=-0.5$. The maximum likelihood is `r round(max(L_set),2)`.
 
 
