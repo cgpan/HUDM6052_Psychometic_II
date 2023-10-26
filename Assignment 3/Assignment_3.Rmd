@@ -1,7 +1,7 @@
 ---
-title: "HUDM6052 Psychometric II Homework_02"
+title: "HUDM6052 Psychometric II Homework_03"
 author: "Chenguang Pan (cp3280@tc.columbia.edu)"
-date: "2023-10-05"
+date: "2023-10-26"
 output:
   pdf_document:
     toc: false
@@ -27,7 +27,63 @@ knitr::opts_chunk$set(
 
 ## Q1  
 
-*Find the maximum discrimination for 1PL, 2PL, and 3PL logistic models...*  
+*Using the item parameters given in the Table...*  
 
 **My Solution:**  
-**2PL MODEL**  
+First, I write the functions about 2PL model and about the corresponding item information function.  
+```{r}
+# write the corresponding information function
+iif <- function(theta, a, b){
+  # get the logit
+  Z <- a*(theta-b)
+  # get the probability
+  out <- 1/(1 + exp(-Z))
+  info <- out*(1-out)*(a^2)
+  return(info)
+}
+
+# set the ability range
+theta <- seq(-3,3, by=0.5)
+# set the item parameters
+a <- c(2, 1.5, 1.5, 1.5, 2)
+b <- c(-1, -0.5, 0, 0.5, 1)
+# define the color
+color_set <- c("red", "green", "blue","violet","black")
+
+# plot the item information function
+info_out <- iif(theta, a[1], b[1])
+# create a vector to sum up all the information function
+test_info <- info_out
+
+# initialize the plot by plotting the first item
+plot(theta, info_out,type = "l", col=color_set[1],
+     main = "Item/Test Information and SEs",
+     xlab = "Ability", ylab = "information",
+     ylim = c(0,3))
+grid()
+
+# plot the rest item using a for loop
+for (i in 2:5) {
+  info_out_i <- iif(theta,a[i],b[i])
+  lines(theta, info_out_i, type ="l", col=color_set[i])
+  test_info <- test_info +info_out_i
+}
+
+# draw the test information function
+lines(theta, test_info, type = "l", col="gray")
+# plot the SE 
+SE <- c()
+for (j in 1:length(theta)) {
+  se_j <- 1/sqrt(sum(iif(theta[j],a,b)))
+  SE[j] <- se_j
+}
+lines(theta, SE, type = "l", col="pink")
+
+# add a legend
+legend('topright',inset=0.05,c("item 1","item 2","item 3","item 4","item 5",
+                              "test information","SE"),
+       lty=1,col=c("red", "green","blue","violet","black","gray","pink"),
+       title="Line Type", cex = 0.5)
+```
+
+
