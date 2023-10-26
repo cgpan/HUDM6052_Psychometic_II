@@ -1,0 +1,33 @@
+---
+title: "HUDM6052 Psychometric II Homework_02"
+author: "Chenguang Pan (cp3280@tc.columbia.edu)"
+date: "2023-10-05"
+output:
+  pdf_document:
+    toc: false
+    toc_depth: 4
+    number_sections: false
+    keep_tex: true
+    highlight: tango
+---
+```{=latex}
+\setcounter{tocdepth}{4}
+\tableofcontents
+```
+```{r setup, include=FALSE}
+## Global options
+knitr::opts_chunk$set(
+  cache = TRUE,
+  prompt = TRUE,
+  comment = '',
+  collapse = TRUE,
+  warning = FALSE,
+  message = FALSE)
+```   
+
+## Q1  
+
+*Find the maximum discrimination for 1PL, 2PL, and 3PL logistic models...*  
+
+**My Solution:**  
+**2PL MODEL**  
