@@ -109,7 +109,7 @@
 \title{HUDM6052 Psychometric II Homework\_02}
 \author{Chenguang Pan
 (\href{mailto:cp3280@tc.columbia.edu}{\nolinkurl{cp3280@tc.columbia.edu}})}
-\date{2023-10-05}
+\date{2023-10-27}
 
 \begin{document}
 \maketitle
@@ -161,14 +161,13 @@ Since the 1PL is a special case of 2PL, plug the \(\alpha = 1\) into the
 partial derivative of slope function \(S'(\theta)\) above. One can
 easily have same conclusion that the maximum of slope of 1PL model is at
 the point \(\theta = \beta\).\\
-Therefore, the maximum of the 1PL model's slope is \(\frac{1}{4}\).
+Therefore, the maximum of the 1PL model's slope is \(\frac{1}{4}.\)
 
 \textbf{3PL MODEL}\\
 For the 3PL model, follow the idea above. It is not difficult to get the
 slope function \[S(\theta)=\frac{\alpha (1-c) e^{-z}}{(1 + e^{-z})^2}.\]
 Plug the \(\theta=\beta\), one can easily have the maximum slope is
-\[\frac{1}{4}\alpha(1-c)\].\\
-\textbf{MATH IS S\_XY!}
+\[\frac{1}{4}\alpha(1-c).\]
 
 \hypertarget{q2}{%
 \subsection{Q2}\label{q2}}
@@ -216,11 +215,8 @@ iteratively.
 \SpecialCharTok{+}\NormalTok{     odds }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(P}\SpecialCharTok{/}\NormalTok{Q,}\DecValTok{3}\NormalTok{)}
 \SpecialCharTok{+}     \CommentTok{\# get the logit}
 \SpecialCharTok{+}\NormalTok{     logit }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(}\FunctionTok{log}\NormalTok{(odds),}\DecValTok{3}\NormalTok{)    }
-\SpecialCharTok{+}     \CommentTok{\# if the odds greater than 1, we can expected this student j may}
-\SpecialCharTok{+}     \CommentTok{\# get this item correctly}
-\SpecialCharTok{+}     \ControlFlowTok{if}\NormalTok{(odds }\SpecialCharTok{\textgreater{}=}\DecValTok{1}\NormalTok{)\{}
-\SpecialCharTok{+}\NormalTok{       exp\_cor }\OtherTok{\textless{}{-}}\NormalTok{ exp\_cor }\SpecialCharTok{+} \DecValTok{1}
-\SpecialCharTok{+}\NormalTok{     \}}
+\SpecialCharTok{+}     \CommentTok{\# get the expected total score}
+\SpecialCharTok{+}\NormalTok{     exp\_cor }\OtherTok{\textless{}{-}}\NormalTok{ exp\_cor }\SpecialCharTok{+}\NormalTok{ P}
 \SpecialCharTok{+}     \CommentTok{\# print the results for this student}
 \SpecialCharTok{+}     \CommentTok{\#print(paste0("Odds: ", odds," ."))}
 \SpecialCharTok{+}     \CommentTok{\#print(paste0("Logit:", logit," ."))}
@@ -314,18 +310,17 @@ under\ldots{}}
 \end{Shaded}
 
 The results show that the \(\hat{\zeta}=.202\) and
-\(\hat{\lambda}=.824\) after 4 iterations. Convert the value into
+\(\hat{\lambda}=.824\) after 3 iterations. Convert the value into
 \(\hat{\alpha} = \hat{\lambda}=.824\) and
 \(\hat{\beta} = -\frac{\hat{\zeta}}{\hat{\lambda}}=-0.245\). Therefore,
 the estimated logistic model is
 \[P(\theta)=\frac{1}{1+e^{-.824(\theta+.245)}}.\]
 
-Notes about coding: The way my code to get the \texttt{L1},\texttt{L11},
-etc., is kinda wordy. R actually provides more efficient way. For
-example, one can just type
-\texttt{L1\ \textless{}-\ sum(f\_set*W*vec\_tempt\_1)} to get the same
-result. Here, I use the matrix alegra style to refresh my memory about
-the past math knowledge.
+Please note: The way my code to get the \texttt{L1},\texttt{L11}, etc.,
+is wordy. R actually provides more efficient way. For example, one can
+just type \texttt{L1\ \textless{}-\ sum(f\_set*W*vec\_tempt\_1)} to get
+the same result. Here, I use the matrix algebra style to refresh my
+memory about the past math knowledge.
 
 \hypertarget{q3-part-b}{%
 \subsection{Q3-Part b}\label{q3-part-b}}

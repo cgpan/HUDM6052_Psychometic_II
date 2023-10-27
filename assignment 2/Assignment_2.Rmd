@@ -1,7 +1,7 @@
 ---
 title: "HUDM6052 Psychometric II Homework_02"
 author: "Chenguang Pan (cp3280@tc.columbia.edu)"
-date: "2023-10-05"
+date: "2023-10-27"
 output:
   pdf_document:
     toc: false
@@ -43,11 +43,10 @@ Therefore, the maximum of the 2PL model's slope is $$\frac{1}{4}\alpha$$.
   **1PL MODEL**  
   
 Since the 1PL is a special case of 2PL, plug the $\alpha = 1$ into the partial derivative of slope function $S'(\theta)$ above. One can easily have same conclusion that the maximum of slope of 1PL model is at the point $\theta = \beta$.  
-Therefore, the maximum of the 1PL model's slope is $\frac{1}{4}$.
+Therefore, the maximum of the 1PL model's slope is $\frac{1}{4}.$
 
 **3PL MODEL**  
-For the 3PL model, follow the idea above. It is not difficult to get the slope function $$S(\theta)=\frac{\alpha (1-c) e^{-z}}{(1 + e^{-z})^2}.$$ Plug the $\theta=\beta$, one can easily have the maximum slope is $$\frac{1}{4}\alpha(1-c)$$.  
-**MATH IS S_XY!**
+For the 3PL model, follow the idea above. It is not difficult to get the slope function $$S(\theta)=\frac{\alpha (1-c) e^{-z}}{(1 + e^{-z})^2}.$$ Plug the $\theta=\beta$, one can easily have the maximum slope is $$\frac{1}{4}\alpha(1-c).$$  
 
 ## Q2  
 
@@ -86,11 +85,8 @@ for (j in 1:5) {
     odds <- round(P/Q,3)
     # get the logit
     logit <- round(log(odds),3)    
-    # if the odds greater than 1, we can expected this student j may
-    # get this item correctly
-    if(odds >=1){
-      exp_cor <- exp_cor + 1
-    }
+    # get the expected total score
+    exp_cor <- exp_cor + P
     # print the results for this student
     #print(paste0("Odds: ", odds," ."))
     #print(paste0("Logit:", logit," ."))
@@ -171,9 +167,9 @@ print(paste0("The estimated zeta is: ", round(zeta,4)," ."))
 print(paste0("The estimated lambda is: ", round(lambda,4)," ."))
 ```  
 
-The results show that the $\hat{\zeta}=.202$ and $\hat{\lambda}=.824$ after 4 iterations. Convert the value into $\hat{\alpha} = \hat{\lambda}=.824$ and $\hat{\beta} = -\frac{\hat{\zeta}}{\hat{\lambda}}=-0.245$. Therefore, the estimated logistic model is $$P(\theta)=\frac{1}{1+e^{-.824(\theta+.245)}}.$$  
+The results show that the $\hat{\zeta}=.202$ and $\hat{\lambda}=.824$ after 3 iterations. Convert the value into $\hat{\alpha} = \hat{\lambda}=.824$ and $\hat{\beta} = -\frac{\hat{\zeta}}{\hat{\lambda}}=-0.245$. Therefore, the estimated logistic model is $$P(\theta)=\frac{1}{1+e^{-.824(\theta+.245)}}.$$  
 
-Notes about coding: The way my code to get the `L1`,`L11`, etc., is kinda wordy. R actually provides more efficient way. For example, one can just type `L1 <- sum(f_set*W*vec_tempt_1)` to get the same result. Here, I use the matrix alegra style to refresh my memory about the past math knowledge.  
+Please note: The way my code to get the `L1`,`L11`, etc., is wordy. R actually provides more efficient way. For example, one can just type `L1 <- sum(f_set*W*vec_tempt_1)` to get the same result. Here, I use the matrix algebra style to refresh my memory about the past math knowledge.  
 
 ## Q3-Part b  
 
