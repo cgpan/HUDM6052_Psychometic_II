@@ -224,7 +224,62 @@ Finally, to get the item level fit metric.
 ```{r}
 itemfit(mod_3pl)
 ```  
-Only `item 3` and `item 27` are statistically flagged under the family-wise Type I error rate of .05, with the Bonferroni correction being poorly fitted items. [*I found this type of interpretation from a textbook. To my current knowledge, I am not very clear about this test. I will dive in later.*]
+Only `item 3` and `item 27` are statistically flagged under the family-wise Type I error rate of .05, with the Bonferroni correction being poorly fitted items.   
+
+## Assignment 2 Q2 Updated  
+
+**I also updated the assignment 2 and re-uploaded to canvas. Thanks!**
+
+*Let the discrimination, difficulty and guessing parameters of five items be...*  
+
+**My Solution:**  
+First, I write a 3PL model function:  
+```{r}
+# items' discrimination
+a_ <- c(0.5,1,1.5,2.5,1)
+# items' difficulty levels
+b_ <- c(-1,-0.5,0,0.5,1)
+# items's guessing parameters
+c_ <- c(0,0.1,0.15,0.05,0.32)
+# trait vector
+theta_ <- c(-2.0, -1.0, 0,1,2)
+# write a 3PL model
+irt_3pl <- function(theta,a,b,c){
+  z <- 1.702*a*(theta - b)
+  output <- c + (1-c)/(1+exp(-z))
+  return(output)
+}
+```  
+Next, for each test-taker (i.e., each trait), get the required values iteratively.  
+```{r}
+# using a for-loop to get the values
+for (j in 1:5) {
+  #print(paste0("-------------For the theta =", theta_[j]," : -------------"))
+  exp_cor <- 0
+  for (i in 1:5) {
+    #print(paste0("-----For the item i=", i," : -----"))
+    P <- irt_3pl(theta= theta_[j], 
+                 a=a_[i], b=b_[i], c=c_[i])
+    Q <- 1-P
+    # get the odds
+    odds <- round(P/Q,3)
+    # get the logit
+    logit <- round(log(odds),3)    
+    # get the expected total score
+    exp_cor <- exp_cor + P
+    # print the results for this student
+    #print(paste0("Odds: ", odds," ."))
+    #print(paste0("Logit:", logit," ."))
+  }
+  # get the expected proportion of correct
+  prop <- round(exp_cor/5,3)
+  #print(paste0("Expected Correct #:", exp_cor," ."))
+  #print(paste0("Expected Correct proportion:", prop," ."))
+}
+```  
+To make the layout good-looking, I loaded the results into a table as followed.  
+
+![](table_1.png)  
 
 
 
