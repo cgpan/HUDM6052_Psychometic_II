@@ -30,7 +30,7 @@ knitr::opts_chunk$set(
 *Using the item parameters given in the Table...*  
 
 **My Solution:**  
-First, I write the functions about 2PL model and about the corresponding item information function.  
+
 ```{r}
 # write the corresponding information function
 iif <- function(theta, a, b){
@@ -84,6 +84,100 @@ legend('topright',inset=0.05,c("item 1","item 2","item 3","item 4","item 5",
                               "test information","SE"),
        lty=1,col=c("red", "green","blue","violet","black","gray","pink"),
        title="Line Type", cex = 0.5)
-```
+```  
+
+  
+  
+## Q2.a  
+
+*a. For each of the six items given in the Table below...*  
+
+**My Solution:**  
+The maximum value of a 3PL's information function is at $$\theta_{max}=\beta_i + \frac{1}{a_i}log[\frac{1+\sqrt{1+8c_i}}{2}].$$  
+Therefore, I write a function to get the optimal $\theta_{max}$ first. And then send this value together with the parameters into the information function for 3PL model to get the results.
+```{r}
+# write a function to get the theta_max
+get_theta <- function(a,b,c){
+  out <- b + log(0.5+0.5*sqrt(1+8*c))/a
+  return(out)
+}
+
+# write the 3pl information function
+iif_3pl <- function(theta, a, b, c){
+  z <- a*(theta - b)
+  p <- c + (1-c)/(1+exp(-z))
+  p_star <- 1/(1 + exp(-z))
+  I <- (a^2)*p*(1-p)*(p_star/p)^2
+  return(I)
+}
+```  
+Next, plug the given paramters into the functions to get the results.
+```{r}
+# load the given parameters vectors
+b <- c(1,1,1,-1.5,-0.5,0.5)
+a <- c(1.8,0.8,1.8,1.8,1.2,0.4)
+c <- c(0,0,0.25,0,0.1,0.15)
+
+# using a for loop to get all the required values
+theta_vec <- c()
+info_vec <- c()
+for (i in 1:length(b)) {
+  # get the optimal theta value
+  theta_max <- get_theta(a = a[i],b = b[i],c = c[i])
+  theta_vec[i] <- theta_max
+  # get the maximum value of information of item i
+  info_max <- iif_3pl(theta = theta_max,a = a[i],b = b[i],c = c[i])
+  info_vec[i] <- info_max
+}
+
+# Merge all the values as a dataframe
+df_out <- data.frame(
+  item = seq(1,6),
+  theta_max = theta_vec,
+  info_max = info_vec
+)
+
+df_out
+```  
+The maximum values of information and corresponding $\theta s$ are shown at end of the code chunk above.  
+
+
+## Q2.b  
+
+*b. Which item would you choose to make up a two-item...*  
+
+**My Solution:**  
+I will choose the `item 1` and `item 2` to make a two-item test since they have the maximum information at the $\theta = 1.0$, which means this test can more accurately measure this given test-taker's ability. The test information at $\theta = 1.0$ is $$0.81+0.16=0.97.$$  
+
+## Q3.a  
+
+*a. Determine the standard error of the estimate...*  
+
+**My Solution:**  
+```{r}
+# load the given paramters
+a <- c(1,1,2,2)
+b <- c(0,1,1,1.5)
+theta <- 1.5
+
+# using the information function created in the Q1 to get the 
+# vector of information at the theta=1.5 for each item
+info_vec <- iif(theta=1.5, a, b)
+
+# get the SE
+SE_j <- 1/sqrt(sum(info_vec))
+SE_j
+```  
+Therefore, the SE for the test-taker with estimated trait $\theta=1.5$ is `r round(SE_j, 3)`.  
+  
+## Q3.a  
+
+*b. Construct a 95% confidence interval for...*  
+
+**My Solution:**  
+The 95% confidence interval of the estimated $\theta=1.5$ is 
+$$95\%CI = 1.5\pm 1.96\times 0.679.$$  
+Therefore, $95\%CI$ is $[.169, 2.831].$  
+
 
 

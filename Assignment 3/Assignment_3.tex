@@ -122,9 +122,7 @@
 
 \emph{Using the item parameters given in the Table\ldots{}}
 
-\textbf{My Solution:}\\
-First, I write the functions about 2PL model and about the corresponding
-item information function.
+\textbf{My Solution:}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -184,5 +182,118 @@ item information function.
 \end{Shaded}
 
 \includegraphics{Assignment_3_files/figure-latex/unnamed-chunk-1-1.pdf}
+
+\hypertarget{q2.a}{%
+\subsection{Q2.a}\label{q2.a}}
+
+\emph{a. For each of the six items given in the Table below\ldots{}}
+
+\textbf{My Solution:}\\
+The maximum value of a 3PL's information function is at
+\[\theta_{max}=\beta_i + \frac{1}{a_i}log[\frac{1+\sqrt{1+8c_i}}{2}].\]\\
+Therefore, I write a function to get the optimal \(\theta_{max}\) first.
+And then send this value together with the parameters into the
+information function for 3PL model to get the results.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\SpecialCharTok{\textgreater{}} \CommentTok{\# write a function to get the theta\_max}
+\ErrorTok{\textgreater{}}\NormalTok{ get\_theta }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(a,b,c)\{}
+\SpecialCharTok{+}\NormalTok{   out }\OtherTok{\textless{}{-}}\NormalTok{ b }\SpecialCharTok{+} \FunctionTok{log}\NormalTok{(}\FloatTok{0.5+0.5}\SpecialCharTok{*}\FunctionTok{sqrt}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\DecValTok{8}\SpecialCharTok{*}\NormalTok{c))}\SpecialCharTok{/}\NormalTok{a}
+\SpecialCharTok{+}   \FunctionTok{return}\NormalTok{(out)}
+\SpecialCharTok{+}\NormalTok{ \}}
+\SpecialCharTok{\textgreater{}} 
+\ErrorTok{\textgreater{}} \CommentTok{\# write the 3pl information function}
+\ErrorTok{\textgreater{}}\NormalTok{ iif\_3pl }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(theta, a, b, c)\{}
+\SpecialCharTok{+}\NormalTok{   z }\OtherTok{\textless{}{-}}\NormalTok{ a}\SpecialCharTok{*}\NormalTok{(theta }\SpecialCharTok{{-}}\NormalTok{ b)}
+\SpecialCharTok{+}\NormalTok{   p }\OtherTok{\textless{}{-}}\NormalTok{ c }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{c)}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{z))}
+\SpecialCharTok{+}\NormalTok{   p\_star }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1} \SpecialCharTok{+} \FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{z))}
+\SpecialCharTok{+}\NormalTok{   I }\OtherTok{\textless{}{-}}\NormalTok{ (a}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}\SpecialCharTok{*}\NormalTok{p}\SpecialCharTok{*}\NormalTok{(}\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{p)}\SpecialCharTok{*}\NormalTok{(p\_star}\SpecialCharTok{/}\NormalTok{p)}\SpecialCharTok{\^{}}\DecValTok{2}
+\SpecialCharTok{+}   \FunctionTok{return}\NormalTok{(I)}
+\SpecialCharTok{+}\NormalTok{ \}}
+\end{Highlighting}
+\end{Shaded}
+
+Next, plug the given paramters into the functions to get the results.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\SpecialCharTok{\textgreater{}} \CommentTok{\# load the given parameters vectors}
+\ErrorTok{\textgreater{}}\NormalTok{ b }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\SpecialCharTok{{-}}\FloatTok{1.5}\NormalTok{,}\SpecialCharTok{{-}}\FloatTok{0.5}\NormalTok{,}\FloatTok{0.5}\NormalTok{)}
+\SpecialCharTok{\textgreater{}}\NormalTok{ a }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{1.8}\NormalTok{,}\FloatTok{0.8}\NormalTok{,}\FloatTok{1.8}\NormalTok{,}\FloatTok{1.8}\NormalTok{,}\FloatTok{1.2}\NormalTok{,}\FloatTok{0.4}\NormalTok{)}
+\SpecialCharTok{\textgreater{}}\NormalTok{ c }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}\FloatTok{0.25}\NormalTok{,}\DecValTok{0}\NormalTok{,}\FloatTok{0.1}\NormalTok{,}\FloatTok{0.15}\NormalTok{)}
+\SpecialCharTok{\textgreater{}} 
+\ErrorTok{\textgreater{}} \CommentTok{\# using a for loop to get all the required values}
+\ErrorTok{\textgreater{}}\NormalTok{ theta\_vec }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{()}
+\SpecialCharTok{\textgreater{}}\NormalTok{ info\_vec }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{()}
+\SpecialCharTok{\textgreater{}} \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(b)) \{}
+\SpecialCharTok{+}   \CommentTok{\# get the optimal theta value}
+\SpecialCharTok{+}\NormalTok{   theta\_max }\OtherTok{\textless{}{-}} \FunctionTok{get\_theta}\NormalTok{(}\AttributeTok{a =}\NormalTok{ a[i],}\AttributeTok{b =}\NormalTok{ b[i],}\AttributeTok{c =}\NormalTok{ c[i])}
+\SpecialCharTok{+}\NormalTok{   theta\_vec[i] }\OtherTok{\textless{}{-}}\NormalTok{ theta\_max}
+\SpecialCharTok{+}   \CommentTok{\# get the maximum value of information of item i}
+\SpecialCharTok{+}\NormalTok{   info\_max }\OtherTok{\textless{}{-}} \FunctionTok{iif\_3pl}\NormalTok{(}\AttributeTok{theta =}\NormalTok{ theta\_max,}\AttributeTok{a =}\NormalTok{ a[i],}\AttributeTok{b =}\NormalTok{ b[i],}\AttributeTok{c =}\NormalTok{ c[i])}
+\SpecialCharTok{+}\NormalTok{   info\_vec[i] }\OtherTok{\textless{}{-}}\NormalTok{ info\_max}
+\SpecialCharTok{+}\NormalTok{ \}}
+\SpecialCharTok{\textgreater{}} 
+\ErrorTok{\textgreater{}} \CommentTok{\# Merge all the values as a dataframe}
+\ErrorTok{\textgreater{}}\NormalTok{ df\_out }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+\SpecialCharTok{+}   \AttributeTok{item =} \FunctionTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{6}\NormalTok{),}
+\SpecialCharTok{+}   \AttributeTok{theta\_max =}\NormalTok{ theta\_vec,}
+\SpecialCharTok{+}   \AttributeTok{info\_max =}\NormalTok{ info\_vec}
+\SpecialCharTok{+}\NormalTok{ )}
+\SpecialCharTok{\textgreater{}} 
+\ErrorTok{\textgreater{}}\NormalTok{ df\_out}
+\NormalTok{  item  theta\_max   info\_max}
+\DecValTok{1}    \DecValTok{1}  \FloatTok{1.0000000} \FloatTok{0.81000000}
+\DecValTok{2}    \DecValTok{2}  \FloatTok{1.0000000} \FloatTok{0.16000000}
+\DecValTok{3}    \DecValTok{3}  \FloatTok{1.1732808} \FloatTok{0.50122974}
+\DecValTok{4}    \DecValTok{4} \SpecialCharTok{{-}}\FloatTok{1.5000000} \FloatTok{0.81000000}
+\DecValTok{5}    \DecValTok{5} \SpecialCharTok{{-}}\FloatTok{0.3685794} \FloatTok{0.29665631}
+\DecValTok{6}    \DecValTok{6}  \FloatTok{1.0410421} \FloatTok{0.02998276}
+\end{Highlighting}
+\end{Shaded}
+
+The maximum values of information and corresponding \(\theta s\) are
+shown at end of the code chunk above.
+
+\hypertarget{q2.b}{%
+\subsection{Q2.b}\label{q2.b}}
+
+\emph{b. Which item would you choose to make up a two-item\ldots{}}
+
+\textbf{My Solution:}\\
+I will choose the \texttt{item\ 1} and \texttt{item\ 2} to make a
+two-item test since they have the maximum information at the
+\(\theta = 1.0\), which means this test can more accurately measure this
+given test-taker's ability. The test information at \(\theta = 1.0\) is
+\[0.81+0.16=0.97.\]
+
+\hypertarget{q3}{%
+\subsection{Q3}\label{q3}}
+
+\emph{a. Determine the standard error of the estimate\ldots{}}
+
+\textbf{My Solution:}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\SpecialCharTok{\textgreater{}} \CommentTok{\# load the given paramters}
+\ErrorTok{\textgreater{}}\NormalTok{ a }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{)}
+\SpecialCharTok{\textgreater{}}\NormalTok{ b }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\FloatTok{1.5}\NormalTok{)}
+\SpecialCharTok{\textgreater{}}\NormalTok{ theta }\OtherTok{\textless{}{-}} \FloatTok{1.5}
+\SpecialCharTok{\textgreater{}} 
+\ErrorTok{\textgreater{}} \CommentTok{\# using the information function created in the Q1 to get the }
+\ErrorTok{\textgreater{}} \CommentTok{\# vector of information at the theta=1.5 for each item}
+\ErrorTok{\textgreater{}}\NormalTok{ info\_vec }\OtherTok{\textless{}{-}} \FunctionTok{iif}\NormalTok{(}\AttributeTok{theta=}\FloatTok{1.5}\NormalTok{, a, b)}
+\SpecialCharTok{\textgreater{}} 
+\ErrorTok{\textgreater{}} \CommentTok{\# get the SE}
+\ErrorTok{\textgreater{}}\NormalTok{ SE\_j }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{/}\FunctionTok{sqrt}\NormalTok{(}\FunctionTok{sum}\NormalTok{(info\_vec))}
+\SpecialCharTok{\textgreater{}}\NormalTok{ SE\_j}
+\NormalTok{[}\DecValTok{1}\NormalTok{] }\FloatTok{0.6787507}
+\end{Highlighting}
+\end{Shaded}
+
+Therefore, the SE for the test-taker with estimated trait \(\theta=1.5\)
+is 0.679.
 
 \end{document}
