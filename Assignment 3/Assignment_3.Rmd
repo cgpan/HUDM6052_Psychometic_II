@@ -170,7 +170,7 @@ SE_j
 ```  
 Therefore, the SE for the test-taker with estimated trait $\theta=1.5$ is `r round(SE_j, 3)`.  
   
-## Q3.a  
+## Q3.b  
 
 *b. Construct a 95% confidence interval for...*  
 
