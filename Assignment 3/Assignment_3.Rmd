@@ -180,4 +180,51 @@ $$95\%CI = 1.5\pm 1.96\times 0.679.$$
 Therefore, $95\%CI$ is $[.169, 2.831].$  
 
 
+## Q4 
+
+*Fit 3PL model to the dataset...*  
+
+**My Solution:**  
+For estimating the 3PL model,
+```{r}
+# load the data
+widths <- c(4, rep(1,40))
+df <- read.fwf("~/Desktop/PhD_Learning/HUDM6052 Psychometric II/HUDM6052_Psychometic_II/Assignment 3/sample-1.dat", widths = widths,
+               header = F, stringsAsFactors=F)
+
+# rename the columns
+items_name <- paste0("item_", seq(1,40))
+col_names <- c("ID", items_name)
+names(df) <- col_names
+
+# fit the 3PL model through MIRT package
+library(mirt)
+# step 1: specify the model, 40 items load on one factor
+#         set a prior distribution for the pseudo-guessing parameter to
+#         reduce problems of estimation convergence
+spec <- 'F = 1-40
+PRIOR = (1-40,g,norm, -1.1,2)'
+
+# step 2: fit the model
+mod_3pl <- mirt(df[,-1], model=spec,itemtype = "3PL", SE=T)
+mod_3pl
+```  
+Next, to get the estimated results for the parameters.  
+```{r}
+coef(mod_3pl, IRTpars = T, printSE=T)
+```  
+Then, to get the overall model fit indicies.  
+```{r}
+# get the overall model fit
+M2(mod_3pl)
+```  
+The `M2 test` shows that the we fail to reject the 3PL model, $p = .930$. The rest of the fit indices show that overall model fits well.
+
+Finally, to get the item level fit metric.  
+```{r}
+itemfit(mod_3pl)
+```  
+Only `item 3` and `item 27` are statistically flagged under the family-wise Type I error rate of .05, with the Bonferroni correction being poorly fitted items. [*I found this type of interpretation from a textbook. To my current knowledge, I am not very clear about this test. I will dive in later.*]
+
+
 
