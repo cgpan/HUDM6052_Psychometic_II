@@ -138,8 +138,25 @@ M2(irt_3pl, na.rm = T)
   
 I conduct the item fit analysis on each model and summarize the results into one table to make the layout concise.  
 ```{r}
+# get the item fit indices for each model
+item_fit_1pl <- itemfit(irt_1pl, na.rm = T)
+item_fit_2pl <- itemfit(irt_2pl, na.rm = T)
+item_fit_3pl <- itemfit(irt_3pl, na.rm = T)
 
-```
+# combine all the outputs into one table
+item_fit_all <- cbind(item_fit_1pl[,c("item")],
+                      round(item_fit_1pl[,c("S_X2", "p.S_X2")],3),
+                      round(item_fit_2pl[,c("S_X2", "p.S_X2")],3),
+                      round(item_fit_3pl[,c("S_X2", "p.S_X2")],3))
+names(item_fit_all)[1] <- "item"
+
+# get all the item fit indices for 1PL, 2PL, and 3PL model
+item_fit_all
+```  
+The results show that all items fit well in all models except the `mathc5` item.  
+
+
+
 
 
 
