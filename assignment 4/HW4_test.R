@@ -46,4 +46,9 @@ PRIOR = (1-33, g, norm, -1.1, 2)'
 irt_3pl <- mirt(df, model = spec, itemtype = "3PL", SE=T)
 irt_3pl
 parameters <- coef(irt_3pl, IRTpars=T, simplify = T)
-as.data.frame(parameters$items)
+as.data.frame(parameters$items)  
+
+D = -2*(-20260.22+20078.62)
+
+pchisq(D, df = 32, lower.tail = FALSE)
+

@@ -89,6 +89,58 @@ write.csv(items_all, file = "/Users/panpeter/Desktop/PhD_Learning/HUDM6052 Psych
 ![](all_estimated_items.png)  
 
 Due to the limitation of `mirt package`, I can't constrain all the $\alpha$ to be 1. Rather, I can only set them to be equal across all the items. Therefore, in the estimation for the 1PL, the estimated universal $\alpha$ is .96 here.  
+  
+  
+## Q1-a-(1)
+
+*Does it appear reasonable to assume all the items having an equal slope...*  
+
+**My Solution:**  
+No.  
+  
+  
+From a aspect of test development, since this is a test about math placement, we should expect that items can discriminate students with different traits well. In addition, comparing the estimated parameters from `2PL` model versus `1PL`, these items' levels of discrimination spread along a wide range. It is reasonable to have items with higher levels of discrimination than others.  
+
+From a mathematics perspective, since the 1PL model is nested in the 2PL model, I conducted the `Likelihood Ratio Test` to compare the two models as followed: $$D = -2[ln(L_{1pl})-ln(L_{2pl})] .$$  
+Plug the log likelihood estimated from the above code chunck, then one can have $D = 363.2$ at the degree of freedom of $df = df_{2pl}-df_{1pl} = 66-34 =32$. Based on the Chi-squared distribution, the p value is lower than .001. Therefore, 2PL is better than 1PL, which means the discrimination is preferred.  
+
+  
+## Q1-a-(2)
+
+*Does it appear useful to include a guessing parameter in the model...*  
+
+**My Solution:**  
+  
+Yes, it is useful.  
+
+Intuitively, it is reasonable to include a guessing parameter since this a test with multiple choice and guessing is very possible. In addition, by looking through all the guessing parameters, one can find that the `matchc13`, `matchc21`, and `matchc32` do have quite high guessing rate, i.e., all above .30.  
+  
+However, in terms of model comparison, when using the LRT test again to compare the 2PL vs 3PL model, one can have $D = 28.28$ at $33$ degree of freedom, $P = .701$. Based on the parsimony rule, one should endorse the simpler model, i.e., the 2PL.  
+  
+Therefore, my overall conclusion is including a guessing parameter is useful in this scenario. A practitioner should choose the either model based on their purpose since these two models do not differ a lot.  
+  
+```{r}
+# get the fit indices for 1PL model
+M2(irt_1pl, na.rm = T)
+
+# get the fit indices for 2PL model
+M2(irt_2pl, na.rm = T)
+
+# get the fit indices for 3PL model
+M2(irt_3pl, na.rm = T)
+```  
+  
+## Q1-a-(3)
+
+*Evaluate the goodness of fit of the items with the option of the chi-square test...*  
+
+**My Solution:**  
+  
+I conduct the item fit analysis on each model and summarize the results into one table to make the layout concise.  
+```{r}
+
+```
+
 
 
 

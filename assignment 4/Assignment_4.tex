@@ -250,4 +250,80 @@ the \(\alpha\) to be 1. Rather, I can only set them to be equal across
 all the items. Therefore, in the estimation for the 1PL, the estimated
 universal \(\alpha\) is .96 here.
 
+\hypertarget{q1-a-1}{%
+\subsection{Q1-a-(1)}\label{q1-a-1}}
+
+\emph{Does it appear reasonable to assume all the items having an equal
+slope\ldots{}}
+
+\textbf{My Solution:}\\
+No.~
+
+From a aspect of test development, since this is a test about math
+placement, we should expect that items can discriminate students with
+different traits well. In addition, comparing the estimated parameters
+from \texttt{2PL} model versus \texttt{1PL}, these items' levels of
+discrimination spread along a wide range. It is reasonable to have items
+with higher levels of discrimination than others.
+
+From a mathematics perspective, since the 1PL model is nested in the 2PL
+model, I conducted the \texttt{Likelihood\ Ratio\ Test} to compare the
+two models as followed: \[D = -2[ln(L_{1pl})-ln(L_{2pl})] .\]\\
+Plug the log likelihood estimated from the above code chunck, then one
+can have \(D = 363.2\) at the degree of freedom of
+\(df = df_{2pl}-df_{1pl} = 66-34 =32\). Based on the Chi-squared
+distribution, the p value is lower than .001. Therefore, 2PL is better
+than 1PL, which means the discrimination is preferred.
+
+\hypertarget{q1-a-2}{%
+\subsection{Q1-a-(2)}\label{q1-a-2}}
+
+\emph{Does it appear useful to include a guessing parameter in the
+model\ldots{}}
+
+\textbf{My Solution:} xw
+
+Yes, it is useful.
+
+Intuitively, it is reasonable to include a guessing parameter since this
+a test with multiple choice and guessing is very possible. In addition,
+by looking through all the guessing parameters, one can find that the
+\texttt{matchc13}, \texttt{matchc21}, and \texttt{matchc32} do have
+quite high guessing rate, i.e., all above .30.
+
+However, in terms of model comparison, when using the LRT test again to
+compare the 2PL vs 3PL model, one can have \(D = 28.28\) at \(33\)
+degree of freedom, \(P = .701\). Based on the parsimony rule, one should
+endorse the simpler model, i.e., the 2PL.
+
+Therefore, my overall conclusion is including a guessing parameter is
+useful in this scenario. A practitioner should choose the either model
+based on their purpose since these two models do not differ a lot.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\SpecialCharTok{\textgreater{}} \CommentTok{\# get the fit indices for 1PL model}
+\ErrorTok{\textgreater{}} \FunctionTok{M2}\NormalTok{(irt\_1pl, }\AttributeTok{na.rm =}\NormalTok{ T)}
+\NormalTok{            M2  df p      RMSEA    RMSEA\_5   RMSEA\_95      SRMSR       TLI}
+\NormalTok{stats }\FloatTok{992.2492} \DecValTok{527} \DecValTok{0} \FloatTok{0.03104487} \FloatTok{0.02805368} \FloatTok{0.03398001} \FloatTok{0.05781072} \FloatTok{0.9632371}
+\NormalTok{            CFI}
+\NormalTok{stats }\FloatTok{0.9633067}
+\SpecialCharTok{\textgreater{}} 
+\ErrorTok{\textgreater{}} \CommentTok{\# get the fit indices for 2PL model}
+\ErrorTok{\textgreater{}} \FunctionTok{M2}\NormalTok{(irt\_2pl, }\AttributeTok{na.rm =}\NormalTok{ T)}
+\NormalTok{            M2  df            p      RMSEA    RMSEA\_5   RMSEA\_95      SRMSR}
+\NormalTok{stats }\FloatTok{678.0246} \DecValTok{495} \FloatTok{7.852727e{-}08} \FloatTok{0.02009113} \FloatTok{0.01617592} \FloatTok{0.02371771} \FloatTok{0.03274386}
+\NormalTok{            TLI       CFI}
+\NormalTok{stats }\FloatTok{0.9846029} \FloatTok{0.9855652}
+\SpecialCharTok{\textgreater{}} 
+\ErrorTok{\textgreater{}} \CommentTok{\# get the fit indices for 3PL model}
+\ErrorTok{\textgreater{}} \FunctionTok{M2}\NormalTok{(irt\_3pl, }\AttributeTok{na.rm =}\NormalTok{ T)}
+\NormalTok{            M2  df            p      RMSEA    RMSEA\_5   RMSEA\_95      SRMSR}
+\NormalTok{stats }\FloatTok{604.7095} \DecValTok{462} \FloatTok{8.359281e{-}06} \FloatTok{0.01836359} \FloatTok{0.01400902} \FloatTok{0.02228458} \FloatTok{0.03106851}
+\NormalTok{            TLI       CFI}
+\NormalTok{stats }\FloatTok{0.9871369} \FloatTok{0.9887448}
+\end{Highlighting}
+\end{Shaded}
+
+
 \end{document}
