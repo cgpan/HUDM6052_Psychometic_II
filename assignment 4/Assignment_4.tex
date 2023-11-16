@@ -300,6 +300,81 @@ Therefore, my overall conclusion is including a guessing parameter is
 useful in this scenario. A practitioner should choose the either model
 based on their purpose since these two models do not differ a lot.
 
+\hypertarget{q1-a-3}{%
+\subsection{Q1-a-(3)}\label{q1-a-3}}
+
+\emph{Evaluate the goodness of fit of the items with the option of the
+chi-square test\ldots{}}
+
+\textbf{My Solution:}
+
+I conduct the item fit analysis on each model and summarize the results
+into one table to make the layout concise.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\SpecialCharTok{\textgreater{}} \CommentTok{\# get the item fit indices for each model}
+\ErrorTok{\textgreater{}}\NormalTok{ item\_fit\_1pl }\OtherTok{\textless{}{-}} \FunctionTok{itemfit}\NormalTok{(irt\_1pl, }\AttributeTok{na.rm =}\NormalTok{ T)}
+\SpecialCharTok{\textgreater{}}\NormalTok{ item\_fit\_2pl }\OtherTok{\textless{}{-}} \FunctionTok{itemfit}\NormalTok{(irt\_2pl, }\AttributeTok{na.rm =}\NormalTok{ T)}
+\SpecialCharTok{\textgreater{}}\NormalTok{ item\_fit\_3pl }\OtherTok{\textless{}{-}} \FunctionTok{itemfit}\NormalTok{(irt\_3pl, }\AttributeTok{na.rm =}\NormalTok{ T)}
+\SpecialCharTok{\textgreater{}} 
+\ErrorTok{\textgreater{}} \CommentTok{\# combine all the outputs into one table}
+\ErrorTok{\textgreater{}}\NormalTok{ item\_fit\_all }\OtherTok{\textless{}{-}} \FunctionTok{cbind}\NormalTok{(item\_fit\_1pl[,}\FunctionTok{c}\NormalTok{(}\StringTok{"item"}\NormalTok{)],}
+\SpecialCharTok{+}                       \FunctionTok{round}\NormalTok{(item\_fit\_1pl[,}\FunctionTok{c}\NormalTok{(}\StringTok{"S\_X2"}\NormalTok{, }\StringTok{"p.S\_X2"}\NormalTok{)],}\DecValTok{3}\NormalTok{),}
+\SpecialCharTok{+}                       \FunctionTok{round}\NormalTok{(item\_fit\_2pl[,}\FunctionTok{c}\NormalTok{(}\StringTok{"S\_X2"}\NormalTok{, }\StringTok{"p.S\_X2"}\NormalTok{)],}\DecValTok{3}\NormalTok{),}
+\SpecialCharTok{+}                       \FunctionTok{round}\NormalTok{(item\_fit\_3pl[,}\FunctionTok{c}\NormalTok{(}\StringTok{"S\_X2"}\NormalTok{, }\StringTok{"p.S\_X2"}\NormalTok{)],}\DecValTok{3}\NormalTok{))}
+\SpecialCharTok{\textgreater{}} \FunctionTok{names}\NormalTok{(item\_fit\_all)[}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"item"}
+\SpecialCharTok{\textgreater{}} 
+\ErrorTok{\textgreater{}} \CommentTok{\# get all the item fit indices for 1PL, 2PL, and 3PL model}
+\ErrorTok{\textgreater{}}\NormalTok{ item\_fit\_all}
+\NormalTok{      item    S\_X2 p.S\_X2   S\_X2 p.S\_X2   S\_X2 p.S\_X2}
+\DecValTok{1}\NormalTok{   mathc1  }\FloatTok{24.871}  \FloatTok{0.413} \FloatTok{23.057}  \FloatTok{0.457} \FloatTok{23.880}  \FloatTok{0.354}
+\DecValTok{2}\NormalTok{   mathc2  }\FloatTok{28.123}  \FloatTok{0.211} \FloatTok{30.474}  \FloatTok{0.107} \FloatTok{28.602}  \FloatTok{0.124}
+\DecValTok{3}\NormalTok{   mathc3  }\FloatTok{27.272}  \FloatTok{0.292} \FloatTok{22.457}  \FloatTok{0.493} \FloatTok{21.706}  \FloatTok{0.478}
+\DecValTok{4}\NormalTok{   mathc4  }\FloatTok{26.545}  \FloatTok{0.326} \FloatTok{19.225}  \FloatTok{0.631} \FloatTok{17.456}  \FloatTok{0.683}
+\DecValTok{5}\NormalTok{   mathc5  }\FloatTok{97.340}  \FloatTok{0.000} \FloatTok{52.836}  \FloatTok{0.001} \FloatTok{39.324}  \FloatTok{0.018}
+\DecValTok{6}\NormalTok{   mathc6  }\FloatTok{35.284}  \FloatTok{0.064} \FloatTok{26.846}  \FloatTok{0.217} \FloatTok{23.995}  \FloatTok{0.293}
+\DecValTok{7}\NormalTok{   mathc7  }\FloatTok{30.637}  \FloatTok{0.165} \FloatTok{30.432}  \FloatTok{0.171} \FloatTok{30.827}  \FloatTok{0.127}
+\DecValTok{8}\NormalTok{   mathc8  }\FloatTok{31.167}  \FloatTok{0.149} \FloatTok{31.523}  \FloatTok{0.139} \FloatTok{23.075}  \FloatTok{0.456}
+\DecValTok{9}\NormalTok{   mathc9  }\FloatTok{31.551}  \FloatTok{0.085} \FloatTok{16.430}  \FloatTok{0.690} \FloatTok{12.867}  \FloatTok{0.799}
+\DecValTok{10}\NormalTok{ mathc11  }\FloatTok{24.730}  \FloatTok{0.421} \FloatTok{17.479}  \FloatTok{0.736} \FloatTok{16.875}  \FloatTok{0.719}
+\DecValTok{11}\NormalTok{ mathc12  }\FloatTok{23.575}  \FloatTok{0.486} \FloatTok{22.830}  \FloatTok{0.530} \FloatTok{20.698}  \FloatTok{0.600}
+\DecValTok{12}\NormalTok{ mathc13  }\FloatTok{35.908}  \FloatTok{0.042} \FloatTok{24.648}  \FloatTok{0.263} \FloatTok{19.390}  \FloatTok{0.368}
+\DecValTok{13}\NormalTok{ mathc14  }\FloatTok{27.538}  \FloatTok{0.280} \FloatTok{23.119}  \FloatTok{0.513} \FloatTok{20.507}  \FloatTok{0.611}
+\DecValTok{14}\NormalTok{ mathc15  }\FloatTok{33.526}  \FloatTok{0.093} \FloatTok{21.041}  \FloatTok{0.690} \FloatTok{17.235}  \FloatTok{0.798}
+\DecValTok{15}\NormalTok{ mathc16  }\FloatTok{26.681}  \FloatTok{0.320} \FloatTok{25.327}  \FloatTok{0.388} \FloatTok{22.755}  \FloatTok{0.534}
+\DecValTok{16}\NormalTok{ mathc17  }\FloatTok{21.267}  \FloatTok{0.623} \FloatTok{17.968}  \FloatTok{0.805} \FloatTok{17.158}  \FloatTok{0.801}
+\DecValTok{17}\NormalTok{ mathc18  }\FloatTok{21.575}  \FloatTok{0.605} \FloatTok{22.317}  \FloatTok{0.501} \FloatTok{19.125}  \FloatTok{0.638}
+\DecValTok{18}\NormalTok{ mathc19  }\FloatTok{54.048}  \FloatTok{0.000} \FloatTok{20.763}  \FloatTok{0.706} \FloatTok{20.199}  \FloatTok{0.685}
+\DecValTok{19}\NormalTok{ mathc21  }\FloatTok{61.763}  \FloatTok{0.000} \FloatTok{33.258}  \FloatTok{0.125} \FloatTok{23.345}  \FloatTok{0.441}
+\DecValTok{20}\NormalTok{ mathc22  }\FloatTok{20.404}  \FloatTok{0.674} \FloatTok{20.405}  \FloatTok{0.674} \FloatTok{20.811}  \FloatTok{0.593}
+\DecValTok{21}\NormalTok{ mathc23  }\FloatTok{20.837}  \FloatTok{0.648} \FloatTok{14.494}  \FloatTok{0.952} \FloatTok{13.527}  \FloatTok{0.957}
+\DecValTok{22}\NormalTok{ mathc24  }\FloatTok{20.931}  \FloatTok{0.643} \FloatTok{21.081}  \FloatTok{0.634} \FloatTok{21.063}  \FloatTok{0.577}
+\DecValTok{23}\NormalTok{ mathc25  }\FloatTok{24.945}  \FloatTok{0.409} \FloatTok{21.333}  \FloatTok{0.561} \FloatTok{21.436}  \FloatTok{0.494}
+\DecValTok{24}\NormalTok{ mathc26  }\FloatTok{19.354}  \FloatTok{0.733} \FloatTok{17.673}  \FloatTok{0.819} \FloatTok{18.224}  \FloatTok{0.745}
+\DecValTok{25}\NormalTok{ mathc27  }\FloatTok{45.053}  \FloatTok{0.006} \FloatTok{29.119}  \FloatTok{0.111} \FloatTok{27.443}  \FloatTok{0.157}
+\DecValTok{26}\NormalTok{ mathc28  }\FloatTok{65.450}  \FloatTok{0.000} \FloatTok{24.167}  \FloatTok{0.235} \FloatTok{23.947}  \FloatTok{0.198}
+\DecValTok{27}\NormalTok{ mathc29  }\FloatTok{20.699}  \FloatTok{0.656} \FloatTok{16.372}  \FloatTok{0.839} \FloatTok{14.253}  \FloatTok{0.892}
+\DecValTok{28}\NormalTok{ mathc31  }\FloatTok{38.201}  \FloatTok{0.024} \FloatTok{24.738}  \FloatTok{0.477} \FloatTok{22.294}  \FloatTok{0.503}
+\DecValTok{29}\NormalTok{ mathc32  }\FloatTok{26.751}  \FloatTok{0.316} \FloatTok{22.572}  \FloatTok{0.545} \FloatTok{21.635}  \FloatTok{0.542}
+\DecValTok{30}\NormalTok{ mathc33  }\FloatTok{29.067}  \FloatTok{0.218} \FloatTok{21.204}  \FloatTok{0.569}  \FloatTok{8.064}  \FloatTok{0.995}
+\DecValTok{31}\NormalTok{ mathc34  }\FloatTok{37.352}  \FloatTok{0.040} \FloatTok{26.872}  \FloatTok{0.362} \FloatTok{24.880}  \FloatTok{0.412}
+\DecValTok{32}\NormalTok{ mathc35 }\FloatTok{109.636}  \FloatTok{0.000} \FloatTok{32.770}  \FloatTok{0.205} \FloatTok{35.397}  \FloatTok{0.103}
+\DecValTok{33}\NormalTok{ mathc36  }\FloatTok{28.999}  \FloatTok{0.220} \FloatTok{25.182}  \FloatTok{0.341} \FloatTok{23.768}  \FloatTok{0.360}
+\end{Highlighting}
+\end{Shaded}
+
+The results show that all items fit well in all models except the
+\texttt{mathc5} item.
+
+\hypertarget{q1-a-4}{%
+\subsection{Q1-a-(4)}\label{q1-a-4}}
+
+\emph{Evaluate the overall fit of the model. Which model do you prefer
+for this data?\ldots{}}
+
+\textbf{My Solution:}
+
 \begin{Shaded}
 \begin{Highlighting}[]
 \SpecialCharTok{\textgreater{}} \CommentTok{\# get the fit indices for 1PL model}
@@ -325,71 +400,5 @@ based on their purpose since these two models do not differ a lot.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{q1-a-3}{%
-\subsection{Q1-a-(3)}\label{q1-a-3}}
-
-\emph{Evaluate the goodness of fit of the items with the option of the
-chi-square test\ldots{}}
-
-\textbf{My Solution:}
-
-I conduct the item fit analysis on each model and summarize the results
-into one table to make the layout concise.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\SpecialCharTok{\textgreater{}} \CommentTok{\# get the item fit indices for each model}
-\ErrorTok{\textgreater{}}\NormalTok{ item\_fit\_1pl }\OtherTok{\textless{}{-}} \FunctionTok{itemfit}\NormalTok{(irt\_1pl, }\AttributeTok{na.rm =}\NormalTok{ T)}
-\SpecialCharTok{\textgreater{}}\NormalTok{ item\_fit\_2pl }\OtherTok{\textless{}{-}} \FunctionTok{itemfit}\NormalTok{(irt\_2pl, }\AttributeTok{na.rm =}\NormalTok{ T)}
-\SpecialCharTok{\textgreater{}}\NormalTok{ item\_fit\_3pl }\OtherTok{\textless{}{-}} \FunctionTok{itemfit}\NormalTok{(irt\_3pl, }\AttributeTok{na.rm =}\NormalTok{ T)}
-\SpecialCharTok{\textgreater{}} 
-\ErrorTok{\textgreater{}} \CommentTok{\# combine all the outputs into one table}
-\ErrorTok{\textgreater{}}\NormalTok{ item\_fit\_all }\OtherTok{\textless{}{-}} \FunctionTok{cbind}\NormalTok{(item\_fit\_1pl[,}\FunctionTok{c}\NormalTok{(}\StringTok{"item"}\NormalTok{)],}
-\SpecialCharTok{+}                       \FunctionTok{round}\NormalTok{(item\_fit\_1pl[,}\FunctionTok{c}\NormalTok{(}\StringTok{"S\_X2"}\NormalTok{, }\StringTok{"p.S\_X2"}\NormalTok{)],}\DecValTok{4}\NormalTok{),}
-\SpecialCharTok{+}                       \FunctionTok{round}\NormalTok{(item\_fit\_2pl[,}\FunctionTok{c}\NormalTok{(}\StringTok{"S\_X2"}\NormalTok{, }\StringTok{"p.S\_X2"}\NormalTok{)],}\DecValTok{4}\NormalTok{),}
-\SpecialCharTok{+}                       \FunctionTok{round}\NormalTok{(item\_fit\_3pl[,}\FunctionTok{c}\NormalTok{(}\StringTok{"S\_X2"}\NormalTok{, }\StringTok{"p.S\_X2"}\NormalTok{)],}\DecValTok{4}\NormalTok{))}
-\SpecialCharTok{\textgreater{}} \FunctionTok{names}\NormalTok{(item\_fit\_all)[}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"item"}
-\SpecialCharTok{\textgreater{}} 
-\ErrorTok{\textgreater{}} \CommentTok{\# get all the item fit indices for 1PL, 2PL, and 3PL model}
-\ErrorTok{\textgreater{}}\NormalTok{ item\_fit\_all}
-\NormalTok{      item     S\_X2 p.S\_X2    S\_X2 p.S\_X2    S\_X2 p.S\_X2}
-\DecValTok{1}\NormalTok{   mathc1  }\FloatTok{24.8711} \FloatTok{0.4128} \FloatTok{23.0566} \FloatTok{0.4575} \FloatTok{23.8800} \FloatTok{0.3536}
-\DecValTok{2}\NormalTok{   mathc2  }\FloatTok{28.1234} \FloatTok{0.2112} \FloatTok{30.4743} \FloatTok{0.1074} \FloatTok{28.6024} \FloatTok{0.1239}
-\DecValTok{3}\NormalTok{   mathc3  }\FloatTok{27.2722} \FloatTok{0.2919} \FloatTok{22.4566} \FloatTok{0.4929} \FloatTok{21.7064} \FloatTok{0.4775}
-\DecValTok{4}\NormalTok{   mathc4  }\FloatTok{26.5449} \FloatTok{0.3261} \FloatTok{19.2254} \FloatTok{0.6314} \FloatTok{17.4558} \FloatTok{0.6831}
-\DecValTok{5}\NormalTok{   mathc5  }\FloatTok{97.3404} \FloatTok{0.0000} \FloatTok{52.8362} \FloatTok{0.0014} \FloatTok{39.3238} \FloatTok{0.0183}
-\DecValTok{6}\NormalTok{   mathc6  }\FloatTok{35.2844} \FloatTok{0.0643} \FloatTok{26.8461} \FloatTok{0.2171} \FloatTok{23.9949} \FloatTok{0.2933}
-\DecValTok{7}\NormalTok{   mathc7  }\FloatTok{30.6375} \FloatTok{0.1645} \FloatTok{30.4324} \FloatTok{0.1708} \FloatTok{30.8269} \FloatTok{0.1271}
-\DecValTok{8}\NormalTok{   mathc8  }\FloatTok{31.1674} \FloatTok{0.1490} \FloatTok{31.5235} \FloatTok{0.1393} \FloatTok{23.0747} \FloatTok{0.4564}
-\DecValTok{9}\NormalTok{   mathc9  }\FloatTok{31.5513} \FloatTok{0.0854} \FloatTok{16.4299} \FloatTok{0.6896} \FloatTok{12.8670} \FloatTok{0.7994}
-\DecValTok{10}\NormalTok{ mathc11  }\FloatTok{24.7300} \FloatTok{0.4205} \FloatTok{17.4787} \FloatTok{0.7364} \FloatTok{16.8747} \FloatTok{0.7187}
-\DecValTok{11}\NormalTok{ mathc12  }\FloatTok{23.5755} \FloatTok{0.4861} \FloatTok{22.8300} \FloatTok{0.5298} \FloatTok{20.6982} \FloatTok{0.5995}
-\DecValTok{12}\NormalTok{ mathc13  }\FloatTok{35.9083} \FloatTok{0.0422} \FloatTok{24.6484} \FloatTok{0.2627} \FloatTok{19.3900} \FloatTok{0.3682}
-\DecValTok{13}\NormalTok{ mathc14  }\FloatTok{27.5382} \FloatTok{0.2800} \FloatTok{23.1188} \FloatTok{0.5128} \FloatTok{20.5069} \FloatTok{0.6112}
-\DecValTok{14}\NormalTok{ mathc15  }\FloatTok{33.5261} \FloatTok{0.0934} \FloatTok{21.0409} \FloatTok{0.6903} \FloatTok{17.2351} \FloatTok{0.7976}
-\DecValTok{15}\NormalTok{ mathc16  }\FloatTok{26.6813} \FloatTok{0.3195} \FloatTok{25.3271} \FloatTok{0.3882} \FloatTok{22.7550} \FloatTok{0.5343}
-\DecValTok{16}\NormalTok{ mathc17  }\FloatTok{21.2673} \FloatTok{0.6229} \FloatTok{17.9679} \FloatTok{0.8046} \FloatTok{17.1584} \FloatTok{0.8014}
-\DecValTok{17}\NormalTok{ mathc18  }\FloatTok{21.5747} \FloatTok{0.6046} \FloatTok{22.3173} \FloatTok{0.5012} \FloatTok{19.1247} \FloatTok{0.6376}
-\DecValTok{18}\NormalTok{ mathc19  }\FloatTok{54.0475} \FloatTok{0.0004} \FloatTok{20.7629} \FloatTok{0.7058} \FloatTok{20.1995} \FloatTok{0.6854}
-\DecValTok{19}\NormalTok{ mathc21  }\FloatTok{61.7627} \FloatTok{0.0000} \FloatTok{33.2577} \FloatTok{0.1247} \FloatTok{23.3450} \FloatTok{0.4408}
-\DecValTok{20}\NormalTok{ mathc22  }\FloatTok{20.4045} \FloatTok{0.6736} \FloatTok{20.4046} \FloatTok{0.6736} \FloatTok{20.8114} \FloatTok{0.5926}
-\DecValTok{21}\NormalTok{ mathc23  }\FloatTok{20.8365} \FloatTok{0.6483} \FloatTok{14.4939} \FloatTok{0.9524} \FloatTok{13.5269} \FloatTok{0.9566}
-\DecValTok{22}\NormalTok{ mathc24  }\FloatTok{20.9306} \FloatTok{0.6428} \FloatTok{21.0813} \FloatTok{0.6339} \FloatTok{21.0628} \FloatTok{0.5773}
-\DecValTok{23}\NormalTok{ mathc25  }\FloatTok{24.9448} \FloatTok{0.4088} \FloatTok{21.3330} \FloatTok{0.5608} \FloatTok{21.4360} \FloatTok{0.4939}
-\DecValTok{24}\NormalTok{ mathc26  }\FloatTok{19.3543} \FloatTok{0.7328} \FloatTok{17.6730} \FloatTok{0.8186} \FloatTok{18.2240} \FloatTok{0.7452}
-\DecValTok{25}\NormalTok{ mathc27  }\FloatTok{45.0529} \FloatTok{0.0057} \FloatTok{29.1187} \FloatTok{0.1112} \FloatTok{27.4429} \FloatTok{0.1567}
-\DecValTok{26}\NormalTok{ mathc28  }\FloatTok{65.4501} \FloatTok{0.0000} \FloatTok{24.1670} \FloatTok{0.2352} \FloatTok{23.9470} \FloatTok{0.1982}
-\DecValTok{27}\NormalTok{ mathc29  }\FloatTok{20.6986} \FloatTok{0.6564} \FloatTok{16.3725} \FloatTok{0.8389} \FloatTok{14.2529} \FloatTok{0.8923}
-\DecValTok{28}\NormalTok{ mathc31  }\FloatTok{38.2013} \FloatTok{0.0242} \FloatTok{24.7382} \FloatTok{0.4771} \FloatTok{22.2939} \FloatTok{0.5026}
-\DecValTok{29}\NormalTok{ mathc32  }\FloatTok{26.7508} \FloatTok{0.3162} \FloatTok{22.5725} \FloatTok{0.5451} \FloatTok{21.6350} \FloatTok{0.5424}
-\DecValTok{30}\NormalTok{ mathc33  }\FloatTok{29.0666} \FloatTok{0.2176} \FloatTok{21.2045} \FloatTok{0.5686}  \FloatTok{8.0644} \FloatTok{0.9949}
-\DecValTok{31}\NormalTok{ mathc34  }\FloatTok{37.3521} \FloatTok{0.0403} \FloatTok{26.8718} \FloatTok{0.3623} \FloatTok{24.8798} \FloatTok{0.4123}
-\DecValTok{32}\NormalTok{ mathc35 }\FloatTok{109.6358} \FloatTok{0.0000} \FloatTok{32.7703} \FloatTok{0.2048} \FloatTok{35.3966} \FloatTok{0.1033}
-\DecValTok{33}\NormalTok{ mathc36  }\FloatTok{28.9987} \FloatTok{0.2202} \FloatTok{25.1823} \FloatTok{0.3410} \FloatTok{23.7681} \FloatTok{0.3595}
-\end{Highlighting}
-\end{Shaded}
-
-The results show that all items fit well in all models except the
-\texttt{mathc5} item.
 
 \end{document}

@@ -118,17 +118,7 @@ Intuitively, it is reasonable to include a guessing parameter since this a test 
 However, in terms of model comparison, when using the LRT test again to compare the 2PL vs 3PL model, one can have $D = 28.28$ at $33$ degree of freedom, $P = .701$. Based on the parsimony rule, one should endorse the simpler model, i.e., the 2PL.  
   
 Therefore, my overall conclusion is including a guessing parameter is useful in this scenario. A practitioner should choose the either model based on their purpose since these two models do not differ a lot.  
-  
-```{r}
-# get the fit indices for 1PL model
-M2(irt_1pl, na.rm = T)
 
-# get the fit indices for 2PL model
-M2(irt_2pl, na.rm = T)
-
-# get the fit indices for 3PL model
-M2(irt_3pl, na.rm = T)
-```  
   
 ## Q1-a-(3)
 
@@ -155,9 +145,23 @@ item_fit_all
 ```  
 The results show that all items fit well in all models except the `mathc5` item.  
 
+## Q1-a-(4)  
 
+*Evaluate the overall fit of the model. Which model do you prefer for this data?...*  
 
+**My Solution:**  
+```{r}
+# get the fit indices for 1PL model
+M2(irt_1pl, na.rm = T)
 
+# get the fit indices for 2PL model
+M2(irt_2pl, na.rm = T)
 
+# get the fit indices for 3PL model
+M2(irt_3pl, na.rm = T)
+```  
+Past studies have recommended that a TLI of or above .95, a CFI of or above .95, an RMSEA of or below .05, and an SRMR of or below .05 could indicate a very good fit. Based on those criteria, all three model demonstrate very good model fit.  
+  
+Next, by conducting the Likelihood Ratio Test (LRT) on 1PL vs. 2PL and 2PL vs. 3PL (finished in `Q1-a-(1)` and `Q1-a-(2)`), 2PL is preferred since it is significantly different from 1PL. In addition, LRT shows there is no significant difference in 2PL and 3PL. Based on the parsimony rule, I prefer 2PL model on this data.  
 
 
