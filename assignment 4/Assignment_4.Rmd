@@ -1,0 +1,94 @@
+---
+title: "HUDM6052 Psychometric II Homework_04"
+author: "Chenguang Pan"
+date: "2023-11-14"
+output:
+  pdf_document:
+    toc: false
+    toc_depth: 4
+    number_sections: false
+    keep_tex: true
+    highlight: tango
+---
+```{=latex}
+\setcounter{tocdepth}{4}
+\tableofcontents
+```
+```{r setup, include=FALSE}
+## Global options
+knitr::opts_chunk$set(
+  cache = TRUE,
+  prompt = TRUE,
+  comment = '',
+  collapse = TRUE,
+  warning = FALSE,
+  message = FALSE)
+```   
+
+## Q1-a-Parameters-Estimation
+
+*Fit the 1PL, 2PL, and 3PL models...report the estimated item parameters in separated tables*  
+
+**My Solution:**  
+To make the layout concise and good-looking, I intentionally omitted the codes for data cleaning and some instant display of running outcomes. I attached the estimated item parameters from all three models into one table to save space.  
+
+```{r}
+# load the binary response dataset
+library(mirt)
+df <- read.csv("/Users/panpeter/Desktop/PhD_Learning/HUDM6052 Psychometric II/HUDM6052_Psychometic_II/assignment 4/binary_reponses.csv")
+df <- df[,-1]
+
+# --------------------------------------------------
+#                       Run 1PL
+# --------------------------------------------------
+
+# specify the model for 33 items loading on 1 dimension
+# and constrain all the item slope to be equal for 1PL estimation
+spec <- 'F = 1-33
+CONSTRAIN = (1-33, a1)'
+
+# estimated the model
+# since I constrained all slopes to be equal, here the argument "2PL" is safe
+irt_1pl <- mirt(df, model = spec, itemtype = "2PL", SE=T)
+irt_1pl
+
+```
+```{r, include=FALSE}
+# get the estimated parameters
+items_1pl <- as.data.frame(coef(irt_1pl, IRTpars=T, simplify=T)$items)
+```
+```{R}
+# --------------------------------------------------
+#                       Run 2PL
+# --------------------------------------------------
+irt_2pl <- mirt(df, model = 1, itemtype = "2PL", SE=T)
+irt_2pl
+```
+```{r, include=FALSE}
+# get the estimated parameters
+items_2pl <- as.data.frame(coef(irt_2pl, IRTpars=T, simplify=T)$items)
+```
+```{R}
+# --------------------------------------------------
+#                       Run 3PL
+# --------------------------------------------------
+# specify the model
+spec <- 'F = 1-33
+PRIOR = (1-33, g, norm, -1.1, 2)'
+irt_3pl <- mirt(df, model = spec, itemtype = "3PL", SE = T)
+irt_3pl
+```  
+
+```{r, include=FALSE}
+# get the estimated parameters for the 3PL
+items_3pl <- as.data.frame(coef(irt_3pl, IRTpars=T, simplify = T)$items)
+# attach all estimated parameters from 3 models
+items_all <- cbind(items_1pl, items_2pl, items_3pl)
+write.csv(items_all, file = "/Users/panpeter/Desktop/PhD_Learning/HUDM6052 Psychometric II/HUDM6052_Psychometic_II/assignment 4/all_estimated_items.csv")
+```  
+![](all_estimated_items.png)  
+
+Due to the limitation of `mirt package`, I can't constrain all the $\alpha$ to be 1. Rather, I can only set them to be equal across all the items. Therefore, in the estimation for the 1PL, the estimated universal $\alpha$ is .96 here.  
+
+
+
