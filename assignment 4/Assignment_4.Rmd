@@ -68,15 +68,17 @@ irt_2pl
 # get the estimated parameters
 items_2pl <- as.data.frame(coef(irt_2pl, IRTpars=T, simplify=T)$items)
 ```
-```{R}
+```{R,results=FALSE}
 # --------------------------------------------------
 #                       Run 3PL
 # --------------------------------------------------
 # specify the model
 spec <- 'F = 1-33
 PRIOR = (1-33, g, norm, -1.1, 2)'
-irt_3pl <- mirt(df, model = spec, itemtype = "3PL", SE = T)
-irt_3pl
+irt_3pl <- mirt(df, model = spec, itemtype = "3PL", SE = T)  
+```
+```{R}
+print(irt_3pl)
 ```  
 
 ```{r, include=FALSE}
@@ -135,15 +137,15 @@ item_fit_3pl <- itemfit(irt_3pl, na.rm = T)
 
 # combine all the outputs into one table
 item_fit_all <- cbind(item_fit_1pl[,c("item")],
-                      round(item_fit_1pl[,c("S_X2", "p.S_X2")],3),
-                      round(item_fit_2pl[,c("S_X2", "p.S_X2")],3),
-                      round(item_fit_3pl[,c("S_X2", "p.S_X2")],3))
+                      round(item_fit_1pl[,c("S_X2", "p.S_X2")],4),
+                      round(item_fit_2pl[,c("S_X2", "p.S_X2")],4),
+                      round(item_fit_3pl[,c("S_X2", "p.S_X2")],4))
 names(item_fit_all)[1] <- "item"
 
 # get all the item fit indices for 1PL, 2PL, and 3PL model
 item_fit_all
 ```  
-The results show that all items fit well in all models except the `mathc5` item.  
+Item `mathc5` shows bad item fit in all three models. In addition, `matchc19`, `matchc21`, `matchc27`, `matchc28`, `matchc31`, `matchc34`, and ``matchc35` show bad fit in 1PL model only.
 
 ## Q1-a-(4)  
 
@@ -163,5 +165,55 @@ M2(irt_3pl, na.rm = T)
 Past studies have recommended that a TLI of or above .95, a CFI of or above .95, an RMSEA of or below .05, and an SRMR of or below .05 could indicate a very good fit. Based on those criteria, all three model demonstrate very good model fit.  
   
 Next, by conducting the Likelihood Ratio Test (LRT) on 1PL vs. 2PL and 2PL vs. 3PL (finished in `Q1-a-(1)` and `Q1-a-(2)`), 2PL is preferred since it is significantly different from 1PL. In addition, LRT shows there is no significant difference in 2PL and 3PL. Based on the parsimony rule, I prefer 2PL model on this data.  
+  
+  
+## Q1-a-(5)  
 
+*Using the estimates obtained from the model you choose in part...*  
+
+**My Solution:**  
+  
+In the selected 2PL model, `matchc 28` shows the highest level of discrimination with $\alpha = 1.949$, and `matchc 35` has the lowest level of discrimination.  
+    
+Next, to find the most informative item on a given trait level, I write a function that automatically search for the targeted item.  
+```{r}
+# write a function to find the most informative item for a given trait
+
+most_info <- function(irt_model, trait){
+  # irt_model can be any estimated IRT model
+  # trait can be any given trait level
+  a <- 0
+  item_num <- 0
+  for (i in 1:33){
+    # extract the item information at a given trait
+    info_temp <- iteminfo(extract.item(irt_model, i), trait)
+    # dynamically updated the best target
+    if (info_temp > a){
+      a <- info_temp
+      item_num <- i
+    }
+  }
+  out <- list(item_num = item_num, 
+              info_value = a)
+  return(out)
+}
+```  
+  
+Then, I applied this function to find the most informative items on the given trait levels of $\theta = -1.5$, $\theta = 0$, and $\theta = 1.5$.  
+
+```{r}
+# on theta = -1.5 
+for (theta in c(-1.5, 0, 1.5)){
+  theta_out <- most_info(irt_2pl, theta)
+  print(paste0("The most informative item on given trait theta=", theta," is the item ", theta_out$item_num, ", i.e., the ", item_fit_2pl$item[theta_out$item_num]))
+  print(paste0("     with the infomation value of ", round(theta_out$info_value,4)))
+}
+```  
+  
+As shown above, the most informative item on $\theta = -1.5$ is the item `matchc9`. The most informative item on $\theta = 0$ is the item `matchc28`. The most informative item on $\theta = 1.5$ is the item `matchc36`.  
+
+
+
+
+  
 

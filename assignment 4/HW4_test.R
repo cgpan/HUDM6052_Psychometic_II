@@ -47,7 +47,7 @@ irt_2pl
 spec <- 'F = 1-33
 PRIOR = (1-33, g, norm, -1.1, 2)'
 irt_3pl <- mirt(df, model = spec, itemtype = "3PL", SE=T)
-irt_3pl
+print(irt_3pl)
 parameters <- coef(irt_3pl, IRTpars=T, simplify = T)
 as.data.frame(parameters$items)  
 
@@ -64,5 +64,37 @@ item_fit_all <- cbind(item_fit_1pl[,c("item")],
                       round(item_fit_2pl[,c("S_X2", "p.S_X2")],4),
                       round(item_fit_3pl[,c("S_X2", "p.S_X2")],4))
 names(item_fit_all)[1] <- "item"
-write.csv(item_fit_all, file = "/Users/panpeter/Desktop/PhD_Learning/HUDM6052 Psychometric II/HUDM6052_Psychometic_II/assignment 4/item_fit_all.csv",
-          row.names = F)
+# write.csv(item_fit_all, file = "/Users/panpeter/Desktop/PhD_Learning/HUDM6052 Psychometric II/HUDM6052_Psychometic_II/assignment 4/item_fit_all.csv",
+#           row.names = F)
+
+iteminfo(extract.item(irt_2pl, 9), -1.5)
+a <- 0
+item_num <- 0
+for (i in 1:33){
+  info_temp <- iteminfo(extract.item(irt_2pl, i), -1.5)
+  if (info_temp > a){
+    a <- info_temp
+    item_num <- i
+  }
+}
+a
+item_num
+
+# write a function to find the most informative item for a given trait
+most_info <- function(irt_model, trait){
+  a <- 0
+  item_num <- 0
+  for (i in 1:33){
+    info_temp <- iteminfo(extract.item(irt_model, i), trait)
+    if (info_temp > a){
+      a <- info_temp
+      item_num <- i
+    }
+  }
+  out <- list(item_num = item_num, info_value = a)
+  return(out)
+}
+
+out <- most_info(irt_2pl, -1.5)
+out$item_num
+out$info_value
