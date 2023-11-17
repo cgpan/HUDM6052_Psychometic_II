@@ -77,3 +77,19 @@ summary(un$F1)
 
 test_info <- testinfo(irt_2pl_short, theta_tempt)
 test_info[theta_tempt == theta_8]
+
+e1 <- exp(1.5)
+e2 <- exp(-0.5)
+e3 <- exp(-2)
+e1
+e2
+e3
+
+sum <- e1+e2+e3
+
+p1 <- e1/sum
+p2 <- e2/sum
+p3 <- e3/sum
+p1
+p2
+p3

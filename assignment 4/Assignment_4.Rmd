@@ -329,6 +329,20 @@ Based on the all the calculation above, for a student with true score of 8, his/
 
 
 
+## Q2  
+  
+  
+*Suppose for three items ...*
 
+**My Solution:**  
+```{r}
+e1 <- exp(1.5)
+e2 <- exp(-0.5)
+e3 <- exp(-2)
+```
+
+In Rasch model, since $$\beta = log(\delta) =log(\frac{1}{\epsilon})=-log(\epsilon), $$ one can have $$\epsilon=e^{(-\beta)}.$$ Therefore, one can easily have $\epsilon_1 = 4.482$, $\epsilon_2 = .607$, and $\epsilon_3 = .135$. 
+The possible response vectors are $$S_1=[1,1,0], S_2=[1,0,1], and S_3=[0,1,1].$$ Therefore, one can have $$P(S_1|\eta_j)=\frac{4.482+.607}{4.482+.607+.135}=.974,$$ $$P(S_2|\eta_j)=\frac{4.482+.135}{4.482+.607+.135}=.884,$$ $$
+P(S_3|\eta_j)=\frac{.135+.607}{4.482+.607+.135}=.142.$$
 
 
