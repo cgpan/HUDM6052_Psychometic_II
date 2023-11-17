@@ -222,25 +222,29 @@ The 1PL model is reasonable to solve this question since total score is sufficie
 Since some of the response vectors contain `NA` values and `mirt` will impute the missing data, I need to select the students who got 20 in total raw score and are without any missing responses. 
 ```{r}
 # get the estimated person trait
-mirt_trait_out <- fscores(irt_1pl, method = 'EAP', full.scores = F, full.scores.SE = T)
-mirt_trait <- as.data.frame(mirt_trait_out)
-sum_score <- apply(mirt_trait[,c(1:33)], 1, function(x) sum(x, na.rm = T))
-mirt_trait$sum_score <- sum_score
-trait_20 <- mirt_trait[which(sum_score==20 & complete.cases(mirt_trait[,c(1:33)])),]
-head(trait_20[,c(34:36)])
+# find the trait level who have the true score of 20
+theta <- fscores(irt_2pl, method = 'EAP')
+tscore <- expected.test(irt_2pl, theta)
+t_t <- data.frame(
+  theta= theta,
+  tscore = tscore
+)
+t_t <- round(t_t,3)
+theta_20 <- t_t[t_t$tscore == 20,]$F1
+t_t[t_t$tscore == 20,]
 ```  
   
   
-The results show that students who got 20 true score have the same trait, $\theta = .402$. Therefore, we need to select 10 items to have the maximum information on the $\theta = .402$.  
+The results show that the trait level of true score 20 is `r theta_20`. Therefore, we need to select 10 items to have the maximum information on the `r theta_20`.  
   
-Next, I try to get the information values of each item on $\theta = .402$ and sort these values in decreasing order. Finally, select the first ten items to make the shorter test.  
+Next, I try to get the information values of each item on `r theta_20` and sort these values in decreasing order. Finally, select the first ten items to make the shorter test.  
   
   
 ```{r}
 info_set <- c()
 # using a for loop to get all info value at this given trait
 for (i in 1:33) {
-  info_tempt <- iteminfo(extract.item(irt_1pl, i), .4018117)
+  info_tempt <- iteminfo(extract.item(irt_1pl, i), theta_20)
   info_set[i] <- info_tempt
 }
 # make a new df
@@ -257,22 +261,24 @@ info_matrix[c(1:10),]
 As shown above, I will select these ten items to create a shorter version of test.  
 ```{r}
 df_short <- df[,which(names(df) %in% info_matrix$item[1:10])]
-# fit 1PL on this short test
-spec <- 'F = 1-10
-CONSTRAIN = (1-10, a1)'
-
-irt_1pl_short <- mirt(df_short, model = spec, itemtype = "2PL", SE=T)
-irt_1pl_short
+# fit 2PL on this short test
+irt_2pl_short <- mirt(df_short, model = 1, itemtype = "2PL", SE=T)
+irt_2pl_short
 ```  
 
 Now to get the person trait estimation. 
 ```{r}
 # get the estimated person trait
-mirt_trait_out <- fscores(irt_1pl_short, method = 'EAP', full.scores = F, full.scores.SE = T)
+mirt_trait_out <- fscores(irt_2pl_short, method = 'EAP', full.scores = F, full.scores.SE = T)
 mirt_trait <- as.data.frame(mirt_trait_out)
-mirt_trait <- round(mirt_trait[which(complete.cases(mirt_trait)),c(11:12)],2)
-head(mirt_trait)
-head(mirt_trait[which(mirt_trait$F == .40),])
+mirt_trait <- round(mirt_trait[which(complete.cases(mirt_trait)),c(11:12)],3)
+library(latticeExtra)
+key = list(colums=1,
+           text=list(lab = c("TCC_overall","TCC_10")),
+           lines=list(lwd=4, col=c("blue","lightblue")))
+p1 <- plot(irt_2pl, type= "info",key=key)
+p2 <- update(plot(irt_2pl_short, type="info"), col="lightblue")
+p1+p2
 ```
 
 

@@ -500,43 +500,35 @@ responses.
 \begin{Shaded}
 \begin{Highlighting}[]
 \SpecialCharTok{\textgreater{}} \CommentTok{\# get the estimated person trait}
-\ErrorTok{\textgreater{}}\NormalTok{ mirt\_trait\_out }\OtherTok{\textless{}{-}} \FunctionTok{fscores}\NormalTok{(irt\_1pl, }\AttributeTok{method =} \StringTok{\textquotesingle{}EAP\textquotesingle{}}\NormalTok{, }\AttributeTok{full.scores =}\NormalTok{ F, }\AttributeTok{full.scores.SE =}\NormalTok{ T)}
-
-\NormalTok{Method}\SpecialCharTok{:}\NormalTok{  EAP}
-
-\NormalTok{Empirical Reliability}\SpecialCharTok{:}
-
-\NormalTok{     F }
-\FloatTok{0.8481} 
-\SpecialCharTok{\textgreater{}}\NormalTok{ mirt\_trait }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(mirt\_trait\_out)}
-\SpecialCharTok{\textgreater{}}\NormalTok{ sum\_score }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(mirt\_trait[,}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{33}\NormalTok{)], }\DecValTok{1}\NormalTok{, }\ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{sum}\NormalTok{(x, }\AttributeTok{na.rm =}\NormalTok{ T))}
-\SpecialCharTok{\textgreater{}}\NormalTok{ mirt\_trait}\SpecialCharTok{$}\NormalTok{sum\_score }\OtherTok{\textless{}{-}}\NormalTok{ sum\_score}
-\SpecialCharTok{\textgreater{}}\NormalTok{ trait\_20 }\OtherTok{\textless{}{-}}\NormalTok{ mirt\_trait[}\FunctionTok{which}\NormalTok{(sum\_score}\SpecialCharTok{==}\DecValTok{20} \SpecialCharTok{\&} \FunctionTok{complete.cases}\NormalTok{(mirt\_trait[,}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{33}\NormalTok{)])),]}
-\SpecialCharTok{\textgreater{}} \FunctionTok{head}\NormalTok{(trait\_20[,}\FunctionTok{c}\NormalTok{(}\DecValTok{34}\SpecialCharTok{:}\DecValTok{36}\NormalTok{)])}
-\NormalTok{            F      SE\_F sum\_score}
-\DecValTok{98}  \FloatTok{0.4018117} \FloatTok{0.3657516}        \DecValTok{20}
-\DecValTok{270} \FloatTok{0.4018117} \FloatTok{0.3657516}        \DecValTok{20}
-\DecValTok{292} \FloatTok{0.4018117} \FloatTok{0.3657516}        \DecValTok{20}
-\DecValTok{317} \FloatTok{0.4018117} \FloatTok{0.3657516}        \DecValTok{20}
-\DecValTok{323} \FloatTok{0.4018117} \FloatTok{0.3657516}        \DecValTok{20}
-\DecValTok{338} \FloatTok{0.4018117} \FloatTok{0.3657516}        \DecValTok{20}
+\ErrorTok{\textgreater{}} \CommentTok{\# find the trait level who have the true score of 20}
+\ErrorTok{\textgreater{}}\NormalTok{ theta }\OtherTok{\textless{}{-}} \FunctionTok{fscores}\NormalTok{(irt\_2pl, }\AttributeTok{method =} \StringTok{\textquotesingle{}EAP\textquotesingle{}}\NormalTok{)}
+\SpecialCharTok{\textgreater{}}\NormalTok{ tscore }\OtherTok{\textless{}{-}} \FunctionTok{expected.test}\NormalTok{(irt\_2pl, theta)}
+\SpecialCharTok{\textgreater{}}\NormalTok{ t\_t }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+\SpecialCharTok{+}   \AttributeTok{theta=}\NormalTok{ theta,}
+\SpecialCharTok{+}   \AttributeTok{tscore =}\NormalTok{ tscore}
+\SpecialCharTok{+}\NormalTok{ )}
+\SpecialCharTok{\textgreater{}}\NormalTok{ t\_t }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(t\_t,}\DecValTok{3}\NormalTok{)}
+\SpecialCharTok{\textgreater{}}\NormalTok{ theta\_20 }\OtherTok{\textless{}{-}}\NormalTok{ t\_t[t\_t}\SpecialCharTok{$}\NormalTok{tscore }\SpecialCharTok{==} \DecValTok{20}\NormalTok{,]}\SpecialCharTok{$}\NormalTok{F1}
+\SpecialCharTok{\textgreater{}}\NormalTok{ t\_t[t\_t}\SpecialCharTok{$}\NormalTok{tscore }\SpecialCharTok{==} \DecValTok{20}\NormalTok{,]}
+\NormalTok{       F1 tscore}
+\DecValTok{851} \FloatTok{0.413}     \DecValTok{20}
 \end{Highlighting}
 \end{Shaded}
 
-The results show that students who got 20 true score have the same
-trait, \(\theta = .402\). Therefore, we need to select 10 items to have
-the maximum information on the \(\theta = .402\).
+The results show that the trait level of true score 20 is 0.413.
+Therefore, we need to select 10 items to have the maximum information on
+the 0.413.
 
-Next, I try to get the information values of each item on
-\(\theta = .402\) and sort these values in decreasing order. Finally,
-select the first ten items to make the shorter test.
+Next, I try to get the information values of each item on 0.413 and sort
+these values in decreasing order. Finally, select the first ten items to
+make the shorter test.
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \SpecialCharTok{\textgreater{}}\NormalTok{ info\_set }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{()}
 \SpecialCharTok{\textgreater{}} \CommentTok{\# using a for loop to get all info value at this given trait}
 \ErrorTok{\textgreater{}} \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{33}\NormalTok{) \{}
-\SpecialCharTok{+}\NormalTok{   info\_tempt }\OtherTok{\textless{}{-}} \FunctionTok{iteminfo}\NormalTok{(}\FunctionTok{extract.item}\NormalTok{(irt\_1pl, i), .}\DecValTok{4018117}\NormalTok{)}
+\SpecialCharTok{+}\NormalTok{   info\_tempt }\OtherTok{\textless{}{-}} \FunctionTok{iteminfo}\NormalTok{(}\FunctionTok{extract.item}\NormalTok{(irt\_1pl, i), theta\_20)}
 \SpecialCharTok{+}\NormalTok{   info\_set[i] }\OtherTok{\textless{}{-}}\NormalTok{ info\_tempt}
 \SpecialCharTok{+}\NormalTok{ \}}
 \SpecialCharTok{\textgreater{}} \CommentTok{\# make a new df}
@@ -549,16 +541,16 @@ select the first ten items to make the shorter test.
 \SpecialCharTok{\textgreater{}} \CommentTok{\# get the first 10 items}
 \ErrorTok{\textgreater{}}\NormalTok{ info\_matrix[}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{10}\NormalTok{),]}
 \NormalTok{      item info\_value}
-\DecValTok{11}\NormalTok{ mathc12  }\FloatTok{0.2303953}
-\DecValTok{24}\NormalTok{ mathc26  }\FloatTok{0.2303806}
-\DecValTok{14}\NormalTok{ mathc15  }\FloatTok{0.2301504}
-\DecValTok{18}\NormalTok{ mathc19  }\FloatTok{0.2299760}
-\DecValTok{13}\NormalTok{ mathc14  }\FloatTok{0.2294367}
-\DecValTok{30}\NormalTok{ mathc33  }\FloatTok{0.2279574}
-\DecValTok{31}\NormalTok{ mathc34  }\FloatTok{0.2276869}
-\DecValTok{32}\NormalTok{ mathc35  }\FloatTok{0.2269344}
-\DecValTok{27}\NormalTok{ mathc29  }\FloatTok{0.2264486}
-\DecValTok{16}\NormalTok{ mathc17  }\FloatTok{0.2254932}
+\DecValTok{11}\NormalTok{ mathc12  }\FloatTok{0.2304691}
+\DecValTok{24}\NormalTok{ mathc26  }\FloatTok{0.2302910}
+\DecValTok{14}\NormalTok{ mathc15  }\FloatTok{0.2302576}
+\DecValTok{18}\NormalTok{ mathc19  }\FloatTok{0.2298369}
+\DecValTok{13}\NormalTok{ mathc14  }\FloatTok{0.2296082}
+\DecValTok{30}\NormalTok{ mathc33  }\FloatTok{0.2276869}
+\DecValTok{31}\NormalTok{ mathc34  }\FloatTok{0.2274038}
+\DecValTok{32}\NormalTok{ mathc35  }\FloatTok{0.2272373}
+\DecValTok{27}\NormalTok{ mathc29  }\FloatTok{0.2261145}
+\DecValTok{16}\NormalTok{ mathc17  }\FloatTok{0.2258490}
 \end{Highlighting}
 \end{Shaded}
 
@@ -568,21 +560,18 @@ version of test.
 \begin{Shaded}
 \begin{Highlighting}[]
 \SpecialCharTok{\textgreater{}}\NormalTok{ df\_short }\OtherTok{\textless{}{-}}\NormalTok{ df[,}\FunctionTok{which}\NormalTok{(}\FunctionTok{names}\NormalTok{(df) }\SpecialCharTok{\%in\%}\NormalTok{ info\_matrix}\SpecialCharTok{$}\NormalTok{item[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{10}\NormalTok{])]}
-\SpecialCharTok{\textgreater{}} \CommentTok{\# fit 1PL on this short test}
-\ErrorTok{\textgreater{}}\NormalTok{ spec }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}F = 1{-}10}
-\StringTok{+ CONSTRAIN = (1{-}10, a1)\textquotesingle{}}
-\SpecialCharTok{\textgreater{}} 
-\ErrorTok{\textgreater{}}\NormalTok{ irt\_1pl\_short }\OtherTok{\textless{}{-}} \FunctionTok{mirt}\NormalTok{(df\_short, }\AttributeTok{model =}\NormalTok{ spec, }\AttributeTok{itemtype =} \StringTok{"2PL"}\NormalTok{, }\AttributeTok{SE=}\NormalTok{T)}
-\NormalTok{Iteration}\SpecialCharTok{:} \DecValTok{1}\NormalTok{, Log}\SpecialCharTok{{-}}\NormalTok{Lik}\SpecialCharTok{:} \SpecialCharTok{{-}}\FloatTok{6666.931}\NormalTok{, Max}\SpecialCharTok{{-}}\NormalTok{Change}\SpecialCharTok{:} \FloatTok{0.07529}\NormalTok{Iteration}\SpecialCharTok{:} \DecValTok{2}\NormalTok{, Log}\SpecialCharTok{{-}}\NormalTok{Lik}\SpecialCharTok{:} \SpecialCharTok{{-}}\FloatTok{6664.492}\NormalTok{, Max}\SpecialCharTok{{-}}\NormalTok{Change}\SpecialCharTok{:} \FloatTok{0.00838}\NormalTok{Iteration}\SpecialCharTok{:} \DecValTok{3}\NormalTok{, Log}\SpecialCharTok{{-}}\NormalTok{Lik}\SpecialCharTok{:} \SpecialCharTok{{-}}\FloatTok{6664.315}\NormalTok{, Max}\SpecialCharTok{{-}}\NormalTok{Change}\SpecialCharTok{:} \FloatTok{0.00569}\NormalTok{Iteration}\SpecialCharTok{:} \DecValTok{4}\NormalTok{, Log}\SpecialCharTok{{-}}\NormalTok{Lik}\SpecialCharTok{:} \SpecialCharTok{{-}}\FloatTok{6664.230}\NormalTok{, Max}\SpecialCharTok{{-}}\NormalTok{Change}\SpecialCharTok{:} \FloatTok{0.00189}\NormalTok{Iteration}\SpecialCharTok{:} \DecValTok{5}\NormalTok{, Log}\SpecialCharTok{{-}}\NormalTok{Lik}\SpecialCharTok{:} \SpecialCharTok{{-}}\FloatTok{6664.227}\NormalTok{, Max}\SpecialCharTok{{-}}\NormalTok{Change}\SpecialCharTok{:} \FloatTok{0.00094}\NormalTok{Iteration}\SpecialCharTok{:} \DecValTok{6}\NormalTok{, Log}\SpecialCharTok{{-}}\NormalTok{Lik}\SpecialCharTok{:} \SpecialCharTok{{-}}\FloatTok{6664.227}\NormalTok{, Max}\SpecialCharTok{{-}}\NormalTok{Change}\SpecialCharTok{:} \FloatTok{0.00077}\NormalTok{Iteration}\SpecialCharTok{:} \DecValTok{7}\NormalTok{, Log}\SpecialCharTok{{-}}\NormalTok{Lik}\SpecialCharTok{:} \SpecialCharTok{{-}}\FloatTok{6664.227}\NormalTok{, Max}\SpecialCharTok{{-}}\NormalTok{Change}\SpecialCharTok{:} \FloatTok{0.00053}\NormalTok{Iteration}\SpecialCharTok{:} \DecValTok{8}\NormalTok{, Log}\SpecialCharTok{{-}}\NormalTok{Lik}\SpecialCharTok{:} \SpecialCharTok{{-}}\FloatTok{6664.226}\NormalTok{, Max}\SpecialCharTok{{-}}\NormalTok{Change}\SpecialCharTok{:} \FloatTok{0.00016}\NormalTok{Iteration}\SpecialCharTok{:} \DecValTok{9}\NormalTok{, Log}\SpecialCharTok{{-}}\NormalTok{Lik}\SpecialCharTok{:} \SpecialCharTok{{-}}\FloatTok{6664.226}\NormalTok{, Max}\SpecialCharTok{{-}}\NormalTok{Change}\SpecialCharTok{:} \FloatTok{0.00008}
+\SpecialCharTok{\textgreater{}} \CommentTok{\# fit 2PL on this short test}
+\ErrorTok{\textgreater{}}\NormalTok{ irt\_2pl\_short }\OtherTok{\textless{}{-}} \FunctionTok{mirt}\NormalTok{(df\_short, }\AttributeTok{model =} \DecValTok{1}\NormalTok{, }\AttributeTok{itemtype =} \StringTok{"2PL"}\NormalTok{, }\AttributeTok{SE=}\NormalTok{T)}
+\NormalTok{Iteration}\SpecialCharTok{:} \DecValTok{1}\NormalTok{, Log}\SpecialCharTok{{-}}\NormalTok{Lik}\SpecialCharTok{:} \SpecialCharTok{{-}}\FloatTok{6666.931}\NormalTok{, Max}\SpecialCharTok{{-}}\NormalTok{Change}\SpecialCharTok{:} \FloatTok{0.24246}\NormalTok{Iteration}\SpecialCharTok{:} \DecValTok{2}\NormalTok{, Log}\SpecialCharTok{{-}}\NormalTok{Lik}\SpecialCharTok{:} \SpecialCharTok{{-}}\FloatTok{6639.237}\NormalTok{, Max}\SpecialCharTok{{-}}\NormalTok{Change}\SpecialCharTok{:} \FloatTok{0.14015}\NormalTok{Iteration}\SpecialCharTok{:} \DecValTok{3}\NormalTok{, Log}\SpecialCharTok{{-}}\NormalTok{Lik}\SpecialCharTok{:} \SpecialCharTok{{-}}\FloatTok{6632.172}\NormalTok{, Max}\SpecialCharTok{{-}}\NormalTok{Change}\SpecialCharTok{:} \FloatTok{0.08349}\NormalTok{Iteration}\SpecialCharTok{:} \DecValTok{4}\NormalTok{, Log}\SpecialCharTok{{-}}\NormalTok{Lik}\SpecialCharTok{:} \SpecialCharTok{{-}}\FloatTok{6630.201}\NormalTok{, Max}\SpecialCharTok{{-}}\NormalTok{Change}\SpecialCharTok{:} \FloatTok{0.04936}\NormalTok{Iteration}\SpecialCharTok{:} \DecValTok{5}\NormalTok{, Log}\SpecialCharTok{{-}}\NormalTok{Lik}\SpecialCharTok{:} \SpecialCharTok{{-}}\FloatTok{6629.661}\NormalTok{, Max}\SpecialCharTok{{-}}\NormalTok{Change}\SpecialCharTok{:} \FloatTok{0.02940}\NormalTok{Iteration}\SpecialCharTok{:} \DecValTok{6}\NormalTok{, Log}\SpecialCharTok{{-}}\NormalTok{Lik}\SpecialCharTok{:} \SpecialCharTok{{-}}\FloatTok{6629.505}\NormalTok{, Max}\SpecialCharTok{{-}}\NormalTok{Change}\SpecialCharTok{:} \FloatTok{0.01778}\NormalTok{Iteration}\SpecialCharTok{:} \DecValTok{7}\NormalTok{, Log}\SpecialCharTok{{-}}\NormalTok{Lik}\SpecialCharTok{:} \SpecialCharTok{{-}}\FloatTok{6629.445}\NormalTok{, Max}\SpecialCharTok{{-}}\NormalTok{Change}\SpecialCharTok{:} \FloatTok{0.00846}\NormalTok{Iteration}\SpecialCharTok{:} \DecValTok{8}\NormalTok{, Log}\SpecialCharTok{{-}}\NormalTok{Lik}\SpecialCharTok{:} \SpecialCharTok{{-}}\FloatTok{6629.436}\NormalTok{, Max}\SpecialCharTok{{-}}\NormalTok{Change}\SpecialCharTok{:} \FloatTok{0.00487}\NormalTok{Iteration}\SpecialCharTok{:} \DecValTok{9}\NormalTok{, Log}\SpecialCharTok{{-}}\NormalTok{Lik}\SpecialCharTok{:} \SpecialCharTok{{-}}\FloatTok{6629.434}\NormalTok{, Max}\SpecialCharTok{{-}}\NormalTok{Change}\SpecialCharTok{:} \FloatTok{0.00331}\NormalTok{Iteration}\SpecialCharTok{:} \DecValTok{10}\NormalTok{, Log}\SpecialCharTok{{-}}\NormalTok{Lik}\SpecialCharTok{:} \SpecialCharTok{{-}}\FloatTok{6629.432}\NormalTok{, Max}\SpecialCharTok{{-}}\NormalTok{Change}\SpecialCharTok{:} \FloatTok{0.00064}\NormalTok{Iteration}\SpecialCharTok{:} \DecValTok{11}\NormalTok{, Log}\SpecialCharTok{{-}}\NormalTok{Lik}\SpecialCharTok{:} \SpecialCharTok{{-}}\FloatTok{6629.432}\NormalTok{, Max}\SpecialCharTok{{-}}\NormalTok{Change}\SpecialCharTok{:} \FloatTok{0.00047}\NormalTok{Iteration}\SpecialCharTok{:} \DecValTok{12}\NormalTok{, Log}\SpecialCharTok{{-}}\NormalTok{Lik}\SpecialCharTok{:} \SpecialCharTok{{-}}\FloatTok{6629.432}\NormalTok{, Max}\SpecialCharTok{{-}}\NormalTok{Change}\SpecialCharTok{:} \FloatTok{0.00036}\NormalTok{Iteration}\SpecialCharTok{:} \DecValTok{13}\NormalTok{, Log}\SpecialCharTok{{-}}\NormalTok{Lik}\SpecialCharTok{:} \SpecialCharTok{{-}}\FloatTok{6629.432}\NormalTok{, Max}\SpecialCharTok{{-}}\NormalTok{Change}\SpecialCharTok{:} \FloatTok{0.00029}\NormalTok{Iteration}\SpecialCharTok{:} \DecValTok{14}\NormalTok{, Log}\SpecialCharTok{{-}}\NormalTok{Lik}\SpecialCharTok{:} \SpecialCharTok{{-}}\FloatTok{6629.432}\NormalTok{, Max}\SpecialCharTok{{-}}\NormalTok{Change}\SpecialCharTok{:} \FloatTok{0.00022}\NormalTok{Iteration}\SpecialCharTok{:} \DecValTok{15}\NormalTok{, Log}\SpecialCharTok{{-}}\NormalTok{Lik}\SpecialCharTok{:} \SpecialCharTok{{-}}\FloatTok{6629.432}\NormalTok{, Max}\SpecialCharTok{{-}}\NormalTok{Change}\SpecialCharTok{:} \FloatTok{0.00016}\NormalTok{Iteration}\SpecialCharTok{:} \DecValTok{16}\NormalTok{, Log}\SpecialCharTok{{-}}\NormalTok{Lik}\SpecialCharTok{:} \SpecialCharTok{{-}}\FloatTok{6629.432}\NormalTok{, Max}\SpecialCharTok{{-}}\NormalTok{Change}\SpecialCharTok{:} \FloatTok{0.00007}
 
 \NormalTok{Calculating information matrix...}
-\SpecialCharTok{\textgreater{}}\NormalTok{ irt\_1pl\_short}
+\SpecialCharTok{\textgreater{}}\NormalTok{ irt\_2pl\_short}
 
 \NormalTok{Call}\SpecialCharTok{:}
-\FunctionTok{mirt}\NormalTok{(}\AttributeTok{data =}\NormalTok{ df\_short, }\AttributeTok{model =}\NormalTok{ spec, }\AttributeTok{itemtype =} \StringTok{"2PL"}\NormalTok{, }\AttributeTok{SE =}\NormalTok{ T)}
+\FunctionTok{mirt}\NormalTok{(}\AttributeTok{data =}\NormalTok{ df\_short, }\AttributeTok{model =} \DecValTok{1}\NormalTok{, }\AttributeTok{itemtype =} \StringTok{"2PL"}\NormalTok{, }\AttributeTok{SE =}\NormalTok{ T)}
 
 \NormalTok{Full}\SpecialCharTok{{-}}\NormalTok{information item factor analysis with }\DecValTok{1} \FunctionTok{factor}\NormalTok{(s).}
-\NormalTok{Converged within }\FloatTok{1e{-}04}\NormalTok{ tolerance after }\DecValTok{9}\NormalTok{ EM iterations.}
+\NormalTok{Converged within }\FloatTok{1e{-}04}\NormalTok{ tolerance after }\DecValTok{16}\NormalTok{ EM iterations.}
 \NormalTok{mirt version}\SpecialCharTok{:} \FloatTok{1.40} 
 \NormalTok{M}\SpecialCharTok{{-}}\NormalTok{step optimizer}\SpecialCharTok{:}\NormalTok{ BFGS }
 \NormalTok{EM acceleration}\SpecialCharTok{:}\NormalTok{ Ramsay }
@@ -591,12 +580,12 @@ version of test.
 
 \NormalTok{Information matrix estimated with method}\SpecialCharTok{:}\NormalTok{ Oakes}
 \NormalTok{Second}\SpecialCharTok{{-}}\NormalTok{order test}\SpecialCharTok{:}\NormalTok{ model is a possible local maximum}
-\NormalTok{Condition number of information matrix }\OtherTok{=}  \FloatTok{9.243253}
+\NormalTok{Condition number of information matrix }\OtherTok{=}  \FloatTok{7.242151}
 
-\NormalTok{Log}\SpecialCharTok{{-}}\NormalTok{likelihood }\OtherTok{=} \SpecialCharTok{{-}}\FloatTok{6664.226}
+\NormalTok{Log}\SpecialCharTok{{-}}\NormalTok{likelihood }\OtherTok{=} \SpecialCharTok{{-}}\FloatTok{6629.432}
 \NormalTok{Estimated parameters}\SpecialCharTok{:} \DecValTok{20} 
-\NormalTok{AIC }\OtherTok{=} \FloatTok{13350.45}
-\NormalTok{BIC }\OtherTok{=} \FloatTok{13404.88}\NormalTok{; SABIC }\OtherTok{=} \FloatTok{13369.94}
+\NormalTok{AIC }\OtherTok{=} \FloatTok{13298.86}
+\NormalTok{BIC }\OtherTok{=} \FloatTok{13397.82}\NormalTok{; SABIC }\OtherTok{=} \FloatTok{13334.3}
 \end{Highlighting}
 \end{Shaded}
 
@@ -605,29 +594,26 @@ Now to get the person trait estimation.
 \begin{Shaded}
 \begin{Highlighting}[]
 \SpecialCharTok{\textgreater{}} \CommentTok{\# get the estimated person trait}
-\ErrorTok{\textgreater{}}\NormalTok{ mirt\_trait\_out }\OtherTok{\textless{}{-}} \FunctionTok{fscores}\NormalTok{(irt\_1pl\_short, }\AttributeTok{method =} \StringTok{\textquotesingle{}EAP\textquotesingle{}}\NormalTok{, }\AttributeTok{full.scores =}\NormalTok{ F, }\AttributeTok{full.scores.SE =}\NormalTok{ T)}
+\ErrorTok{\textgreater{}}\NormalTok{ mirt\_trait\_out }\OtherTok{\textless{}{-}} \FunctionTok{fscores}\NormalTok{(irt\_2pl\_short, }\AttributeTok{method =} \StringTok{\textquotesingle{}EAP\textquotesingle{}}\NormalTok{, }\AttributeTok{full.scores =}\NormalTok{ F, }\AttributeTok{full.scores.SE =}\NormalTok{ T)}
 
 \NormalTok{Method}\SpecialCharTok{:}\NormalTok{  EAP}
 
 \NormalTok{Empirical Reliability}\SpecialCharTok{:}
 
-\NormalTok{     F }
-\FloatTok{0.5769} 
+\NormalTok{    F1 }
+\FloatTok{0.6087} 
 \SpecialCharTok{\textgreater{}}\NormalTok{ mirt\_trait }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(mirt\_trait\_out)}
-\SpecialCharTok{\textgreater{}}\NormalTok{ mirt\_trait }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(mirt\_trait[}\FunctionTok{which}\NormalTok{(}\FunctionTok{complete.cases}\NormalTok{(mirt\_trait)),}\FunctionTok{c}\NormalTok{(}\DecValTok{11}\SpecialCharTok{:}\DecValTok{12}\NormalTok{)],}\DecValTok{2}\NormalTok{)}
-\SpecialCharTok{\textgreater{}} \FunctionTok{head}\NormalTok{(mirt\_trait)}
-\NormalTok{      F SE\_F}
-\DecValTok{1} \SpecialCharTok{{-}}\FloatTok{1.50} \FloatTok{0.72}
-\DecValTok{2} \SpecialCharTok{{-}}\FloatTok{1.10} \FloatTok{0.69}
-\DecValTok{3} \SpecialCharTok{{-}}\FloatTok{1.10} \FloatTok{0.69}
-\DecValTok{4} \SpecialCharTok{{-}}\FloatTok{0.72} \FloatTok{0.66}
-\DecValTok{6} \SpecialCharTok{{-}}\FloatTok{1.10} \FloatTok{0.69}
-\DecValTok{7} \SpecialCharTok{{-}}\FloatTok{0.72} \FloatTok{0.66}
-\SpecialCharTok{\textgreater{}} \FunctionTok{head}\NormalTok{(mirt\_trait[}\FunctionTok{which}\NormalTok{(mirt\_trait}\SpecialCharTok{$}\NormalTok{F }\SpecialCharTok{==}\NormalTok{ .}\DecValTok{40}\NormalTok{),])}
-\NormalTok{[}\DecValTok{1}\NormalTok{] F    SE\_F}
-\SpecialCharTok{\textless{}}\DecValTok{0}\NormalTok{ rows}\SpecialCharTok{\textgreater{}}\NormalTok{ (or }\DecValTok{0}\SpecialCharTok{{-}}\NormalTok{length row.names)}
+\SpecialCharTok{\textgreater{}}\NormalTok{ mirt\_trait }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(mirt\_trait[}\FunctionTok{which}\NormalTok{(}\FunctionTok{complete.cases}\NormalTok{(mirt\_trait)),}\FunctionTok{c}\NormalTok{(}\DecValTok{11}\SpecialCharTok{:}\DecValTok{12}\NormalTok{)],}\DecValTok{3}\NormalTok{)}
+\SpecialCharTok{\textgreater{}} \FunctionTok{library}\NormalTok{(latticeExtra)}
+\SpecialCharTok{\textgreater{}}\NormalTok{ key }\OtherTok{=} \FunctionTok{list}\NormalTok{(}\AttributeTok{colums=}\DecValTok{1}\NormalTok{,}
+\SpecialCharTok{+}            \AttributeTok{text=}\FunctionTok{list}\NormalTok{(}\AttributeTok{lab =} \FunctionTok{c}\NormalTok{(}\StringTok{"TCC\_overall"}\NormalTok{,}\StringTok{"TCC\_10"}\NormalTok{)),}
+\SpecialCharTok{+}            \AttributeTok{lines=}\FunctionTok{list}\NormalTok{(}\AttributeTok{lwd=}\DecValTok{4}\NormalTok{, }\AttributeTok{col=}\FunctionTok{c}\NormalTok{(}\StringTok{"blue"}\NormalTok{,}\StringTok{"lightblue"}\NormalTok{)))}
+\SpecialCharTok{\textgreater{}}\NormalTok{ p1 }\OtherTok{\textless{}{-}} \FunctionTok{plot}\NormalTok{(irt\_2pl, }\AttributeTok{type=} \StringTok{"info"}\NormalTok{,}\AttributeTok{key=}\NormalTok{key)}
+\SpecialCharTok{\textgreater{}}\NormalTok{ p2 }\OtherTok{\textless{}{-}} \FunctionTok{update}\NormalTok{(}\FunctionTok{plot}\NormalTok{(irt\_2pl\_short, }\AttributeTok{type=}\StringTok{"info"}\NormalTok{), }\AttributeTok{col=}\StringTok{"lightblue"}\NormalTok{)}
+\SpecialCharTok{\textgreater{}}\NormalTok{ p1}\SpecialCharTok{+}\NormalTok{p2}
 \end{Highlighting}
 \end{Shaded}
 
+\includegraphics{Assignment_4_files/figure-latex/unnamed-chunk-15-1.pdf}
 
 \end{document}
