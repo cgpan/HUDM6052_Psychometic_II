@@ -259,7 +259,7 @@ universal \(\alpha\) is .96 here.
 slope\ldots{}}
 
 \textbf{My Solution:}\\
-No.~
+No.
 
 From a aspect of test development, since this is a test about math
 placement, we should expect that items can discriminate students with
@@ -487,15 +487,11 @@ the item \texttt{matchc28}. The most informative item on
 \emph{Using the estimates obtained from the model you choose in
 part\ldots{}}
 
-\textbf{My Solution:}\\
-The 1PL model is reasonable to solve this question since total score is
-sufficient to estimate the parameters, which means all the students with
-the same total score will have the same estimated trait level.
-
-Since some of the response vectors contain \texttt{NA} values and
-\texttt{mirt} will impute the missing data, I need to select the
-students who got 20 in total raw score and are without any missing
-responses.
+\textbf{My Solution:} As discussed above, I used the 2PL model to
+conduct the analysis. First, I got all the expected score (i.e., true
+score) for each trait levels using the \texttt{expected.test()}
+function. Second, I located the trait score with a corresponding true
+score 20.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -528,12 +524,12 @@ make the shorter test.
 \SpecialCharTok{\textgreater{}}\NormalTok{ info\_set }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{()}
 \SpecialCharTok{\textgreater{}} \CommentTok{\# using a for loop to get all info value at this given trait}
 \ErrorTok{\textgreater{}} \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{33}\NormalTok{) \{}
-\SpecialCharTok{+}\NormalTok{   info\_tempt }\OtherTok{\textless{}{-}} \FunctionTok{iteminfo}\NormalTok{(}\FunctionTok{extract.item}\NormalTok{(irt\_1pl, i), theta\_20)}
+\SpecialCharTok{+}\NormalTok{   info\_tempt }\OtherTok{\textless{}{-}} \FunctionTok{iteminfo}\NormalTok{(}\FunctionTok{extract.item}\NormalTok{(irt\_2pl, i), theta\_20)}
 \SpecialCharTok{+}\NormalTok{   info\_set[i] }\OtherTok{\textless{}{-}}\NormalTok{ info\_tempt}
 \SpecialCharTok{+}\NormalTok{ \}}
 \SpecialCharTok{\textgreater{}} \CommentTok{\# make a new df}
 \ErrorTok{\textgreater{}}\NormalTok{ info\_matrix }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
-\SpecialCharTok{+}   \AttributeTok{item =}\NormalTok{ item\_fit\_1pl[,}\FunctionTok{c}\NormalTok{(}\StringTok{"item"}\NormalTok{)],}
+\SpecialCharTok{+}   \AttributeTok{item =}\NormalTok{ item\_fit\_2pl[,}\FunctionTok{c}\NormalTok{(}\StringTok{"item"}\NormalTok{)],}
 \SpecialCharTok{+}   \AttributeTok{info\_value =}\NormalTok{ info\_set}
 \SpecialCharTok{+}\NormalTok{ )}
 \SpecialCharTok{\textgreater{}} \CommentTok{\# sort this df in decreasing order}
@@ -541,16 +537,16 @@ make the shorter test.
 \SpecialCharTok{\textgreater{}} \CommentTok{\# get the first 10 items}
 \ErrorTok{\textgreater{}}\NormalTok{ info\_matrix[}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{10}\NormalTok{),]}
 \NormalTok{      item info\_value}
-\DecValTok{11}\NormalTok{ mathc12  }\FloatTok{0.2304691}
-\DecValTok{24}\NormalTok{ mathc26  }\FloatTok{0.2302910}
-\DecValTok{14}\NormalTok{ mathc15  }\FloatTok{0.2302576}
-\DecValTok{18}\NormalTok{ mathc19  }\FloatTok{0.2298369}
-\DecValTok{13}\NormalTok{ mathc14  }\FloatTok{0.2296082}
-\DecValTok{30}\NormalTok{ mathc33  }\FloatTok{0.2276869}
-\DecValTok{31}\NormalTok{ mathc34  }\FloatTok{0.2274038}
-\DecValTok{32}\NormalTok{ mathc35  }\FloatTok{0.2272373}
-\DecValTok{27}\NormalTok{ mathc29  }\FloatTok{0.2261145}
-\DecValTok{16}\NormalTok{ mathc17  }\FloatTok{0.2258490}
+\DecValTok{26}\NormalTok{ mathc28  }\FloatTok{0.7836674}
+\DecValTok{25}\NormalTok{ mathc27  }\FloatTok{0.4389921}
+\DecValTok{30}\NormalTok{ mathc33  }\FloatTok{0.3989170}
+\DecValTok{3}\NormalTok{   mathc3  }\FloatTok{0.3747053}
+\DecValTok{27}\NormalTok{ mathc29  }\FloatTok{0.3630622}
+\DecValTok{4}\NormalTok{   mathc4  }\FloatTok{0.3369781}
+\DecValTok{23}\NormalTok{ mathc25  }\FloatTok{0.3355335}
+\DecValTok{6}\NormalTok{   mathc6  }\FloatTok{0.3027605}
+\DecValTok{17}\NormalTok{ mathc18  }\FloatTok{0.2994847}
+\DecValTok{10}\NormalTok{ mathc11  }\FloatTok{0.2713886}
 \end{Highlighting}
 \end{Shaded}
 
@@ -606,7 +602,7 @@ Now to get the person trait estimation.
 \SpecialCharTok{\textgreater{}}\NormalTok{ mirt\_trait }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(mirt\_trait[}\FunctionTok{which}\NormalTok{(}\FunctionTok{complete.cases}\NormalTok{(mirt\_trait)),}\FunctionTok{c}\NormalTok{(}\DecValTok{11}\SpecialCharTok{:}\DecValTok{12}\NormalTok{)],}\DecValTok{3}\NormalTok{)}
 \SpecialCharTok{\textgreater{}} \FunctionTok{library}\NormalTok{(latticeExtra)}
 \SpecialCharTok{\textgreater{}}\NormalTok{ key }\OtherTok{=} \FunctionTok{list}\NormalTok{(}\AttributeTok{colums=}\DecValTok{1}\NormalTok{,}
-\SpecialCharTok{+}            \AttributeTok{text=}\FunctionTok{list}\NormalTok{(}\AttributeTok{lab =} \FunctionTok{c}\NormalTok{(}\StringTok{"TCC\_overall"}\NormalTok{,}\StringTok{"TCC\_10"}\NormalTok{)),}
+\SpecialCharTok{+}            \AttributeTok{text=}\FunctionTok{list}\NormalTok{(}\AttributeTok{lab =} \FunctionTok{c}\NormalTok{(}\StringTok{"Original\_20"}\NormalTok{,}\StringTok{"Shorter\_10"}\NormalTok{)),}
 \SpecialCharTok{+}            \AttributeTok{lines=}\FunctionTok{list}\NormalTok{(}\AttributeTok{lwd=}\DecValTok{4}\NormalTok{, }\AttributeTok{col=}\FunctionTok{c}\NormalTok{(}\StringTok{"blue"}\NormalTok{,}\StringTok{"lightblue"}\NormalTok{)))}
 \SpecialCharTok{\textgreater{}}\NormalTok{ p1 }\OtherTok{\textless{}{-}} \FunctionTok{plot}\NormalTok{(irt\_2pl, }\AttributeTok{type=} \StringTok{"info"}\NormalTok{,}\AttributeTok{key=}\NormalTok{key)}
 \SpecialCharTok{\textgreater{}}\NormalTok{ p2 }\OtherTok{\textless{}{-}} \FunctionTok{update}\NormalTok{(}\FunctionTok{plot}\NormalTok{(irt\_2pl\_short, }\AttributeTok{type=}\StringTok{"info"}\NormalTok{), }\AttributeTok{col=}\StringTok{"lightblue"}\NormalTok{)}
@@ -615,5 +611,21 @@ Now to get the person trait estimation.
 \end{Shaded}
 
 \includegraphics{Assignment_4_files/figure-latex/unnamed-chunk-15-1.pdf}
+
+\hypertarget{q1-c}{%
+\subsection{Q1-c}\label{q1-c}}
+
+\emph{Assume a student with a true score of 8 on the \ldots{}}
+
+\textbf{My Solution:}\\
+First, I used the
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\SpecialCharTok{\textgreater{}} \CommentTok{\# get the estimated person trait}
+\ErrorTok{\textgreater{}} 
+\end{Highlighting}
+\end{Shaded}
+
 
 \end{document}
