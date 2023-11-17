@@ -16,4 +16,3 @@ t_t <- data.frame(
   tscore = tscore
 )
 t_t <- round(t_t,3)
-View(t_t)
