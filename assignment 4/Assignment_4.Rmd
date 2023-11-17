@@ -202,7 +202,7 @@ most_info <- function(irt_model, trait){
 Then, I applied this function to find the most informative items on the given trait levels of $\theta = -1.5$, $\theta = 0$, and $\theta = 1.5$.  
 
 ```{r}
-# on theta = -1.5 
+# using a for loop to get all results in one sitting
 for (theta in c(-1.5, 0, 1.5)){
   theta_out <- most_info(irt_2pl, theta)
   print(paste0("The most informative item on given trait theta=", theta," is the item ", theta_out$item_num, ", i.e., the ", item_fit_2pl$item[theta_out$item_num]))
@@ -212,8 +212,68 @@ for (theta in c(-1.5, 0, 1.5)){
   
 As shown above, the most informative item on $\theta = -1.5$ is the item `matchc9`. The most informative item on $\theta = 0$ is the item `matchc28`. The most informative item on $\theta = 1.5$ is the item `matchc36`.  
 
+## Q1-b  
 
+*Using the estimates obtained from the model you choose in part...*  
 
-
+**My Solution:**  
+The 1PL model is reasonable to solve this question since total score is sufficient to estimate the parameters, which means all the students with the same total score will have the same estimated trait level.   
   
+Since some of the response vectors contain `NA` values and `mirt` will impute the missing data, I need to select the students who got 20 in total raw score and are without any missing responses. 
+```{r}
+# get the estimated person trait
+mirt_trait_out <- fscores(irt_1pl, method = 'EAP', full.scores = F, full.scores.SE = T)
+mirt_trait <- as.data.frame(mirt_trait_out)
+sum_score <- apply(mirt_trait[,c(1:33)], 1, function(x) sum(x, na.rm = T))
+mirt_trait$sum_score <- sum_score
+trait_20 <- mirt_trait[which(sum_score==20 & complete.cases(mirt_trait[,c(1:33)])),]
+head(trait_20[,c(34:36)])
+```  
+  
+  
+The results show that students who got 20 true score have the same trait, $\theta = .402$. Therefore, we need to select 10 items to have the maximum information on the $\theta = .402$.  
+  
+Next, I try to get the information values of each item on $\theta = .402$ and sort these values in decreasing order. Finally, select the first ten items to make the shorter test.  
+  
+  
+```{r}
+info_set <- c()
+# using a for loop to get all info value at this given trait
+for (i in 1:33) {
+  info_tempt <- iteminfo(extract.item(irt_1pl, i), .4018117)
+  info_set[i] <- info_tempt
+}
+# make a new df
+info_matrix <- data.frame(
+  item = item_fit_1pl[,c("item")],
+  info_value = info_set
+)
+# sort this df in decreasing order
+info_matrix <- info_matrix[order(-info_matrix$info_value),]
+# get the first 10 items
+info_matrix[c(1:10),]
+```  
+  
+As shown above, I will select these ten items to create a shorter version of test.  
+```{r}
+df_short <- df[,which(names(df) %in% info_matrix$item[1:10])]
+# fit 1PL on this short test
+spec <- 'F = 1-10
+CONSTRAIN = (1-10, a1)'
+
+irt_1pl_short <- mirt(df_short, model = spec, itemtype = "2PL", SE=T)
+irt_1pl_short
+```  
+
+Now to get the person trait estimation. 
+```{r}
+# get the estimated person trait
+mirt_trait_out <- fscores(irt_1pl_short, method = 'EAP', full.scores = F, full.scores.SE = T)
+mirt_trait <- as.data.frame(mirt_trait_out)
+mirt_trait <- round(mirt_trait[which(complete.cases(mirt_trait)),c(11:12)],2)
+head(mirt_trait)
+head(mirt_trait[which(mirt_trait$F == .40),])
+```
+
+
 

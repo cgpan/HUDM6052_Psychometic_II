@@ -31,7 +31,6 @@ write.csv(binary_responses, file = "/Users/panpeter/Desktop/PhD_Learning/HUDM605
 df <- read.csv("/Users/panpeter/Desktop/PhD_Learning/HUDM6052 Psychometric II/HUDM6052_Psychometic_II/assignment 4/binary_reponses.csv")
 df <- df[,-1]
 
-
 # estimated the model
 # since I constrained all slopes to be equal, here the argument "2PL" is safe
 library(mirt)
@@ -67,34 +66,36 @@ names(item_fit_all)[1] <- "item"
 # write.csv(item_fit_all, file = "/Users/panpeter/Desktop/PhD_Learning/HUDM6052 Psychometric II/HUDM6052_Psychometic_II/assignment 4/item_fit_all.csv",
 #           row.names = F)
 
-iteminfo(extract.item(irt_2pl, 9), -1.5)
-a <- 0
-item_num <- 0
-for (i in 1:33){
-  info_temp <- iteminfo(extract.item(irt_2pl, i), -1.5)
-  if (info_temp > a){
-    a <- info_temp
-    item_num <- i
-  }
-}
-a
-item_num
 
-# write a function to find the most informative item for a given trait
-most_info <- function(irt_model, trait){
-  a <- 0
-  item_num <- 0
-  for (i in 1:33){
-    info_temp <- iteminfo(extract.item(irt_model, i), trait)
-    if (info_temp > a){
-      a <- info_temp
-      item_num <- i
-    }
-  }
-  out <- list(item_num = item_num, info_value = a)
-  return(out)
-}
+total_score <- apply(df, 1, function(x) sum(x, na.rm = T))
+df$sum_score <- total_score
+table(df$sum_score)
 
-out <- most_info(irt_2pl, -1.5)
-out$item_num
-out$info_value
+# -----------------------------------------------------
+person_trait <- fscores(irt_1pl, method = "EAP", full.scores = F, full.scores.SE = T)
+dim(person_trait)
+
+person_trait <- as.data.frame(person_trait)
+unique(person_trait$F1)
+
+# ------------ltm
+library(ltm)
+df_ <- df[,-34]
+ltm_1pl <- rasch(df_)
+summary(ltm_1pl)
+coef(ltm_1pl)
+
+trait_ltm <- factor.scores(ltm_1pl, method = 'EAP')
+
+trait_all <- as.data.frame(trait_ltm$score.dat)
+unique(trait_all$z1)
+
+df <- read.csv("/Users/panpeter/Desktop/PhD_Learning/HUDM6052 Psychometric II/HUDM6052_Psychometic_II/assignment 4/binary_reponses.csv")
+df <- df[,-1]
+total_score <- apply(df, 1, function(x) sum(x, na.rm = T))
+df$sum_score <- total_score
+trait_all$z1[df$sum_score==20]
+tempt <- trait_ltm$score.dat
+tempt$total_score <- df$sum_score
+
+# try rasch model
