@@ -58,13 +58,22 @@ plot(irt_2pl)
 theta <- fscores(irt_2pl_short, method = 'EAP')
 
 theta_tempt <- as.matrix(seq(-6,6,0.01))
-tscore <- expected.test(irt_2pl_short, theta_tempt)
+tscore <- expected.test(irt_2pl, theta_tempt)
+theta_tempt[tscore >19.9 & tscore <20.1]
+theta_20 <- theta_tempt[tscore== 20]
+theta_20
+
 plot(theta_tempt, tscore)
 t_t <- data.frame(
   theta= theta,
   tscore = tscore
 )
 t_t <- round(t_t,3)
-# theta_8 <- t_t[t_t$tscore == 8,]$F1
-# t_t[t_t$tscore >7.99 & t_t$tscore < 8.01,]
-View(t_t)
+
+
+un <- fscores(irt_2pl_short, method = 'EAP', full.scores = T, full.scores.SE = T)
+un <- as.data.frame(un)
+summary(un$F1)
+
+test_info <- testinfo(irt_2pl_short, theta_tempt)
+test_info[theta_tempt == theta_8]

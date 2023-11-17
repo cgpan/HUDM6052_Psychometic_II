@@ -228,20 +228,27 @@ As discussed above, I used the 2PL model to conduct the analysis. First, I got a
 
 
 ```{r}
-# get the estimated person trait
-# find the trait level who have the true score of 20
+# get the thetas from this sample
 theta <- fscores(irt_2pl, method = 'EAP')
-tscore <- expected.test(irt_2pl, theta)
-t_t <- data.frame(
-  theta= theta,
-  tscore = tscore
-)
-t_t <- round(t_t,3)
-theta_20 <- t_t[t_t$tscore == 20,]$F1
-t_t[t_t$tscore == 20,]
-```
 
-The results show that the trait level of true score 20 is `r theta_20`. Therefore, we need to select 10 items to have the maximum information on the `r theta_20`.
+# re-define a vector of trait levles
+theta_tempt <- as.matrix(seq(-6,6,0.01))
+
+# find the trait level who have the true score of 20
+tscore <- expected.test(irt_2pl, theta_tempt)
+theta_20 <- mean(theta_tempt[tscore >19.9 & tscore <20.1])
+
+# plot the TCC curve!
+plot(theta_tempt, tscore, type = "l", col="red",
+     xlim = c(-6,6),
+     main="Total Expected Score (i.e., TCC)",
+     xlab="Theta Levels", ylab="True Score")
+abline(h = 20,col="blue",lty=2)
+abline(v = 0.413,col="blue",lty=2)
+grid()
+
+```  
+The TCC curve shows that the trait level of true score 20 is `r theta_20`. Therefore, we need to select 10 items to have the maximum information on the `r theta_20`.
 
 Next, I try to get the information values of each item on `r theta_20` and sort these values in decreasing order. Finally, select the first ten items to make the shorter test.
 
@@ -275,10 +282,7 @@ irt_2pl_short
 Now to get the person trait estimation.
 
 ```{r}
-# get the estimated person trait
-mirt_trait_out <- fscores(irt_2pl_short, method = 'EAP', full.scores = F, full.scores.SE = T)
-mirt_trait <- as.data.frame(mirt_trait_out)
-mirt_trait <- round(mirt_trait[which(complete.cases(mirt_trait)),c(11:12)],3)
+
 library(latticeExtra)
 key = list(colums=1,
            text=list(lab = c("Original_20","Shorter_10")),
@@ -287,6 +291,8 @@ p1 <- plot(irt_2pl, type= "info",key=key)
 p2 <- update(plot(irt_2pl_short, type="info"), col="lightblue")
 p1+p2
 ```  
+The plot shows that the peak of shorter test's information is closer to the target trait level `r theta_20`. However, it provides less information comparing to the original 20 items test, which means shorter test is less accurate on estimating the given trait level comparing the to the original 20 items.  
+
 
 ## Q1-c  
   
@@ -294,11 +300,35 @@ p1+p2
 *Assume a student with a true score of 8 on the ...*
 
 **My Solution:**  
-First, I used the 
 
 ```{r}
-# get the estimated person trait
+# get the corresponding true score along the trait scores
+tscore <- expected.test(irt_2pl_short, theta_tempt)
+theta_8 <- mean(theta_tempt[tscore >7.9 & tscore <8.1])
+# plot the TCC 
+# plot the TCC curve!
+plot(theta_tempt, tscore, type = "l", col="red",
+     xlim = c(-6,6),
+     main="Total Expected Score (i.e., TCC) for Short Test",
+     xlab="Theta Levels", ylab="True Score")
+abline(h = 8,col="blue",lty=2)
+abline(v = theta_8,col="blue",lty=2)
+grid()
+```  
+The plot shows that the corresponding trait level is around `r theta_8`. Next, I extract the information at this level and calculate the standard error.  
+```{r}
+# get the test info at the theta = 2.255
+test_info <- testinfo(irt_2pl_short, theta_tempt)
+info_8 <- test_info[theta_tempt == round(theta_8,2)]
 
-```
+# calculate the SE based on the relation between the Info and SE
+se_8 <- 1/ sqrt(info_8)
+se_8
+```  
+Based on the all the calculation above, for a student with true score of 8, his/ her corresponding trait level for this short test is `r theta_8` with standard error `r round(se_8,3)`.  
+
+
+
+
 
 

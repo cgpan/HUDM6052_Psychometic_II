@@ -495,27 +495,33 @@ score 20.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\SpecialCharTok{\textgreater{}} \CommentTok{\# get the estimated person trait}
-\ErrorTok{\textgreater{}} \CommentTok{\# find the trait level who have the true score of 20}
+\SpecialCharTok{\textgreater{}} \CommentTok{\# get the thetas from this sample}
 \ErrorTok{\textgreater{}}\NormalTok{ theta }\OtherTok{\textless{}{-}} \FunctionTok{fscores}\NormalTok{(irt\_2pl, }\AttributeTok{method =} \StringTok{\textquotesingle{}EAP\textquotesingle{}}\NormalTok{)}
-\SpecialCharTok{\textgreater{}}\NormalTok{ tscore }\OtherTok{\textless{}{-}} \FunctionTok{expected.test}\NormalTok{(irt\_2pl, theta)}
-\SpecialCharTok{\textgreater{}}\NormalTok{ t\_t }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
-\SpecialCharTok{+}   \AttributeTok{theta=}\NormalTok{ theta,}
-\SpecialCharTok{+}   \AttributeTok{tscore =}\NormalTok{ tscore}
-\SpecialCharTok{+}\NormalTok{ )}
-\SpecialCharTok{\textgreater{}}\NormalTok{ t\_t }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(t\_t,}\DecValTok{3}\NormalTok{)}
-\SpecialCharTok{\textgreater{}}\NormalTok{ theta\_20 }\OtherTok{\textless{}{-}}\NormalTok{ t\_t[t\_t}\SpecialCharTok{$}\NormalTok{tscore }\SpecialCharTok{==} \DecValTok{20}\NormalTok{,]}\SpecialCharTok{$}\NormalTok{F1}
-\SpecialCharTok{\textgreater{}}\NormalTok{ t\_t[t\_t}\SpecialCharTok{$}\NormalTok{tscore }\SpecialCharTok{==} \DecValTok{20}\NormalTok{,]}
-\NormalTok{       F1 tscore}
-\DecValTok{851} \FloatTok{0.413}     \DecValTok{20}
+\SpecialCharTok{\textgreater{}} 
+\ErrorTok{\textgreater{}} \CommentTok{\# re{-}define a vector of trait levles}
+\ErrorTok{\textgreater{}}\NormalTok{ theta\_tempt }\OtherTok{\textless{}{-}} \FunctionTok{as.matrix}\NormalTok{(}\FunctionTok{seq}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{6}\NormalTok{,}\DecValTok{6}\NormalTok{,}\FloatTok{0.01}\NormalTok{))}
+\SpecialCharTok{\textgreater{}} 
+\ErrorTok{\textgreater{}} \CommentTok{\# find the trait level who have the true score of 20}
+\ErrorTok{\textgreater{}}\NormalTok{ tscore }\OtherTok{\textless{}{-}} \FunctionTok{expected.test}\NormalTok{(irt\_2pl, theta\_tempt)}
+\SpecialCharTok{\textgreater{}}\NormalTok{ theta\_20 }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(theta\_tempt[tscore }\SpecialCharTok{\textgreater{}}\FloatTok{19.9} \SpecialCharTok{\&}\NormalTok{ tscore }\SpecialCharTok{\textless{}}\FloatTok{20.1}\NormalTok{])}
+\SpecialCharTok{\textgreater{}} 
+\ErrorTok{\textgreater{}} \CommentTok{\# plot the TCC curve!}
+\ErrorTok{\textgreater{}} \FunctionTok{plot}\NormalTok{(theta\_tempt, tscore, }\AttributeTok{type =} \StringTok{"l"}\NormalTok{, }\AttributeTok{col=}\StringTok{"red"}\NormalTok{,}
+\SpecialCharTok{+}      \AttributeTok{xlim =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{6}\NormalTok{,}\DecValTok{6}\NormalTok{),}
+\SpecialCharTok{+}      \AttributeTok{main=}\StringTok{"Total Expected Score (i.e., TCC)"}\NormalTok{,}
+\SpecialCharTok{+}      \AttributeTok{xlab=}\StringTok{"Theta Levels"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"True Score"}\NormalTok{)}
+\SpecialCharTok{\textgreater{}} \FunctionTok{abline}\NormalTok{(}\AttributeTok{h =} \DecValTok{20}\NormalTok{,}\AttributeTok{col=}\StringTok{"blue"}\NormalTok{,}\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
+\SpecialCharTok{\textgreater{}} \FunctionTok{abline}\NormalTok{(}\AttributeTok{v =} \FloatTok{0.413}\NormalTok{,}\AttributeTok{col=}\StringTok{"blue"}\NormalTok{,}\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
+\SpecialCharTok{\textgreater{}} \FunctionTok{grid}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
-The results show that the trait level of true score 20 is 0.413.
+\includegraphics{Assignment_4_files/figure-latex/unnamed-chunk-12-1.pdf}
+The TCC curve shows that the trait level of true score 20 is 0.41.
 Therefore, we need to select 10 items to have the maximum information on
-the 0.413.
+the 0.41.
 
-Next, I try to get the information values of each item on 0.413 and sort
+Next, I try to get the information values of each item on 0.41 and sort
 these values in decreasing order. Finally, select the first ten items to
 make the shorter test.
 
@@ -537,16 +543,16 @@ make the shorter test.
 \SpecialCharTok{\textgreater{}} \CommentTok{\# get the first 10 items}
 \ErrorTok{\textgreater{}}\NormalTok{ info\_matrix[}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{10}\NormalTok{),]}
 \NormalTok{      item info\_value}
-\DecValTok{26}\NormalTok{ mathc28  }\FloatTok{0.7836674}
-\DecValTok{25}\NormalTok{ mathc27  }\FloatTok{0.4389921}
-\DecValTok{30}\NormalTok{ mathc33  }\FloatTok{0.3989170}
-\DecValTok{3}\NormalTok{   mathc3  }\FloatTok{0.3747053}
-\DecValTok{27}\NormalTok{ mathc29  }\FloatTok{0.3630622}
-\DecValTok{4}\NormalTok{   mathc4  }\FloatTok{0.3369781}
-\DecValTok{23}\NormalTok{ mathc25  }\FloatTok{0.3355335}
-\DecValTok{6}\NormalTok{   mathc6  }\FloatTok{0.3027605}
-\DecValTok{17}\NormalTok{ mathc18  }\FloatTok{0.2994847}
-\DecValTok{10}\NormalTok{ mathc11  }\FloatTok{0.2713886}
+\DecValTok{26}\NormalTok{ mathc28  }\FloatTok{0.7855788}
+\DecValTok{25}\NormalTok{ mathc27  }\FloatTok{0.4398556}
+\DecValTok{30}\NormalTok{ mathc33  }\FloatTok{0.3991881}
+\DecValTok{3}\NormalTok{   mathc3  }\FloatTok{0.3752177}
+\DecValTok{27}\NormalTok{ mathc29  }\FloatTok{0.3633219}
+\DecValTok{4}\NormalTok{   mathc4  }\FloatTok{0.3375869}
+\DecValTok{23}\NormalTok{ mathc25  }\FloatTok{0.3359483}
+\DecValTok{6}\NormalTok{   mathc6  }\FloatTok{0.3034735}
+\DecValTok{17}\NormalTok{ mathc18  }\FloatTok{0.2993334}
+\DecValTok{10}\NormalTok{ mathc11  }\FloatTok{0.2719404}
 \end{Highlighting}
 \end{Shaded}
 
@@ -589,18 +595,8 @@ Now to get the person trait estimation.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\SpecialCharTok{\textgreater{}} \CommentTok{\# get the estimated person trait}
-\ErrorTok{\textgreater{}}\NormalTok{ mirt\_trait\_out }\OtherTok{\textless{}{-}} \FunctionTok{fscores}\NormalTok{(irt\_2pl\_short, }\AttributeTok{method =} \StringTok{\textquotesingle{}EAP\textquotesingle{}}\NormalTok{, }\AttributeTok{full.scores =}\NormalTok{ F, }\AttributeTok{full.scores.SE =}\NormalTok{ T)}
-
-\NormalTok{Method}\SpecialCharTok{:}\NormalTok{  EAP}
-
-\NormalTok{Empirical Reliability}\SpecialCharTok{:}
-
-\NormalTok{    F1 }
-\FloatTok{0.6087} 
-\SpecialCharTok{\textgreater{}}\NormalTok{ mirt\_trait }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(mirt\_trait\_out)}
-\SpecialCharTok{\textgreater{}}\NormalTok{ mirt\_trait }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(mirt\_trait[}\FunctionTok{which}\NormalTok{(}\FunctionTok{complete.cases}\NormalTok{(mirt\_trait)),}\FunctionTok{c}\NormalTok{(}\DecValTok{11}\SpecialCharTok{:}\DecValTok{12}\NormalTok{)],}\DecValTok{3}\NormalTok{)}
-\SpecialCharTok{\textgreater{}} \FunctionTok{library}\NormalTok{(latticeExtra)}
+\SpecialCharTok{\textgreater{}} 
+\ErrorTok{\textgreater{}} \FunctionTok{library}\NormalTok{(latticeExtra)}
 \SpecialCharTok{\textgreater{}}\NormalTok{ key }\OtherTok{=} \FunctionTok{list}\NormalTok{(}\AttributeTok{colums=}\DecValTok{1}\NormalTok{,}
 \SpecialCharTok{+}            \AttributeTok{text=}\FunctionTok{list}\NormalTok{(}\AttributeTok{lab =} \FunctionTok{c}\NormalTok{(}\StringTok{"Original\_20"}\NormalTok{,}\StringTok{"Shorter\_10"}\NormalTok{)),}
 \SpecialCharTok{+}            \AttributeTok{lines=}\FunctionTok{list}\NormalTok{(}\AttributeTok{lwd=}\DecValTok{4}\NormalTok{, }\AttributeTok{col=}\FunctionTok{c}\NormalTok{(}\StringTok{"blue"}\NormalTok{,}\StringTok{"lightblue"}\NormalTok{)))}
@@ -611,21 +607,56 @@ Now to get the person trait estimation.
 \end{Shaded}
 
 \includegraphics{Assignment_4_files/figure-latex/unnamed-chunk-15-1.pdf}
+The plot shows that the peak of shorter test's information is closer to
+the target trait level 0.41. However, it provides less information
+comparing to the original 20 items test, which means shorter test is
+less accurate on estimating the given trait level comparing the to the
+original 20 items.
 
 \hypertarget{q1-c}{%
 \subsection{Q1-c}\label{q1-c}}
 
 \emph{Assume a student with a true score of 8 on the \ldots{}}
 
-\textbf{My Solution:}\\
-First, I used the
+\textbf{My Solution:}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\SpecialCharTok{\textgreater{}} \CommentTok{\# get the estimated person trait}
-\ErrorTok{\textgreater{}} 
+\SpecialCharTok{\textgreater{}} \CommentTok{\# get the corresponding true score along the trait scores}
+\ErrorTok{\textgreater{}}\NormalTok{ tscore }\OtherTok{\textless{}{-}} \FunctionTok{expected.test}\NormalTok{(irt\_2pl\_short, theta\_tempt)}
+\SpecialCharTok{\textgreater{}}\NormalTok{ theta\_8 }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(theta\_tempt[tscore }\SpecialCharTok{\textgreater{}}\FloatTok{7.9} \SpecialCharTok{\&}\NormalTok{ tscore }\SpecialCharTok{\textless{}}\FloatTok{8.1}\NormalTok{])}
+\SpecialCharTok{\textgreater{}} \CommentTok{\# plot the TCC }
+\ErrorTok{\textgreater{}} \CommentTok{\# plot the TCC curve!}
+\ErrorTok{\textgreater{}} \FunctionTok{plot}\NormalTok{(theta\_tempt, tscore, }\AttributeTok{type =} \StringTok{"l"}\NormalTok{, }\AttributeTok{col=}\StringTok{"red"}\NormalTok{,}
+\SpecialCharTok{+}      \AttributeTok{xlim =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{6}\NormalTok{,}\DecValTok{6}\NormalTok{),}
+\SpecialCharTok{+}      \AttributeTok{main=}\StringTok{"Total Expected Score (i.e., TCC) for Short Test"}\NormalTok{,}
+\SpecialCharTok{+}      \AttributeTok{xlab=}\StringTok{"Theta Levels"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"True Score"}\NormalTok{)}
+\SpecialCharTok{\textgreater{}} \FunctionTok{abline}\NormalTok{(}\AttributeTok{h =} \DecValTok{8}\NormalTok{,}\AttributeTok{col=}\StringTok{"blue"}\NormalTok{,}\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
+\SpecialCharTok{\textgreater{}} \FunctionTok{abline}\NormalTok{(}\AttributeTok{v =}\NormalTok{ theta\_8,}\AttributeTok{col=}\StringTok{"blue"}\NormalTok{,}\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
+\SpecialCharTok{\textgreater{}} \FunctionTok{grid}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
+\includegraphics{Assignment_4_files/figure-latex/unnamed-chunk-16-1.pdf}
+The plot shows that the corresponding trait level is around 2.255. Next,
+I extract the information at this level and calculate the standard
+error.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\SpecialCharTok{\textgreater{}} \CommentTok{\# get the test info at the theta = 2.255}
+\ErrorTok{\textgreater{}}\NormalTok{ test\_info }\OtherTok{\textless{}{-}} \FunctionTok{testinfo}\NormalTok{(irt\_2pl\_short, theta\_tempt)}
+\SpecialCharTok{\textgreater{}}\NormalTok{ info\_8 }\OtherTok{\textless{}{-}}\NormalTok{ test\_info[theta\_tempt }\SpecialCharTok{==} \FunctionTok{round}\NormalTok{(theta\_8,}\DecValTok{2}\NormalTok{)]}
+\SpecialCharTok{\textgreater{}} 
+\ErrorTok{\textgreater{}} \CommentTok{\# calculate the SE based on the relation between the Info and SE}
+\ErrorTok{\textgreater{}}\NormalTok{ se\_8 }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{/} \FunctionTok{sqrt}\NormalTok{(info\_8)}
+\SpecialCharTok{\textgreater{}}\NormalTok{ se\_8}
+\NormalTok{[}\DecValTok{1}\NormalTok{] }\FloatTok{1.052787}
+\end{Highlighting}
+\end{Shaded}
+
+Based on the all the calculation above, for a student with true score of
+8, his/ her corresponding trait level for this short test is 2.255 with
+standard error 1.053.
 
 \end{document}
