@@ -319,7 +319,7 @@ The plot shows that the corresponding trait level is around `r theta_8`. Next, I
 ```{r}
 # get the test info at the theta = 2.255
 test_info <- testinfo(irt_2pl_short, theta_tempt)
-info_8 <- test_info[theta_tempt == round(theta_8,2)]
+info_8 <- test_info[theta_tempt == 1]
 
 # calculate the SE based on the relation between the Info and SE
 se_8 <- 1/ sqrt(info_8)

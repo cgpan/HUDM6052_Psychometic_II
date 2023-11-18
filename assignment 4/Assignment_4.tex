@@ -646,18 +646,18 @@ error.
 \begin{Highlighting}[]
 \SpecialCharTok{\textgreater{}} \CommentTok{\# get the test info at the theta = 2.255}
 \ErrorTok{\textgreater{}}\NormalTok{ test\_info }\OtherTok{\textless{}{-}} \FunctionTok{testinfo}\NormalTok{(irt\_2pl\_short, theta\_tempt)}
-\SpecialCharTok{\textgreater{}}\NormalTok{ info\_8 }\OtherTok{\textless{}{-}}\NormalTok{ test\_info[theta\_tempt }\SpecialCharTok{==} \FunctionTok{round}\NormalTok{(theta\_8,}\DecValTok{2}\NormalTok{)]}
+\SpecialCharTok{\textgreater{}}\NormalTok{ info\_8 }\OtherTok{\textless{}{-}}\NormalTok{ test\_info[theta\_tempt }\SpecialCharTok{==} \DecValTok{1}\NormalTok{]}
 \SpecialCharTok{\textgreater{}} 
 \ErrorTok{\textgreater{}} \CommentTok{\# calculate the SE based on the relation between the Info and SE}
 \ErrorTok{\textgreater{}}\NormalTok{ se\_8 }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{/} \FunctionTok{sqrt}\NormalTok{(info\_8)}
 \SpecialCharTok{\textgreater{}}\NormalTok{ se\_8}
-\FunctionTok{numeric}\NormalTok{(}\DecValTok{0}\NormalTok{)}
+\NormalTok{[}\DecValTok{1}\NormalTok{] }\FloatTok{0.6276761}
 \end{Highlighting}
 \end{Shaded}
 
 Based on the all the calculation above, for a student with true score of
 8, his/ her corresponding trait level for this short test is 0.99 with
-standard error .
+standard error 0.628.
 
 \hypertarget{q2}{%
 \subsection{Q2}\label{q2}}
