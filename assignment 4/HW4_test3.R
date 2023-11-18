@@ -85,11 +85,11 @@ e1
 e2
 e3
 
-sum <- e1+e2+e3
+sum <- e1e2+e2e3+e1e3
 
-p1 <- e1/sum
-p2 <- e2/sum
-p3 <- e3/sum
+p1 <- (e1e2)/sum
+p2 <- (e1e3)/sum
+p3 <- (e2e3)/sum
 p1
 p2
 p3
